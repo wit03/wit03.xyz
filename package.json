@@ -2,10 +2,12 @@
   "name": "nextjs-preact-demo",
   "version": "1.0.0",
   "scripts": {
-    "dev": "next",
-    "build": "next build && next export -o build",
-    "start": "NODE_ENV=production next start",
+    "dev": "yarn run watch:css & next",
+    "build": "yarn run build:css & next build && next export -o build",
+    "start": "yarn run watch:css & NODE_ENV=production next start",
     "format": "yarn test:lint --fix",
+    "build:css": "postcss src/styles/tailwind.css -o src/styles/main.css",
+    "watch:css": "postcss src/styles/tailwind.css -o src/styles/main.css --watch",
     "test:types": "tsc",
     "test:lint": "tslint 'src/**/*.{ts,tsx}'"
   },
@@ -16,13 +18,16 @@
     "react-refresh": "^0.8.3"
   },
   "dependencies": {
+    "autoprefixer": "^9.8.5",
     "next": "^9.4.4",
+    "postcss-cli": "^7.1.1",
     "preact": "^10.4.6",
     "preact-render-to-string": "^5.1.10",
     "prettier": "^2.0.5",
     "react": "github:preact-compat/react#1.0.0",
     "react-dom": "github:preact-compat/react-dom#1.0.0",
     "react-ssr-prepass": "npm:preact-ssr-prepass@^1.0.1",
+    "tailwindcss": "^1.5.1",
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
     "tslint-eslint-rules": "^5.4.0",
