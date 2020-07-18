@@ -12,6 +12,7 @@ const Hobbies:React.FC = () => {
       <p className="lg:w-1/2 w-full leading-relaxed text-base">Whatever I'm doing I take it serious, brooklyn asymmetrical gentrify, subway tile poke farm-to-table. Franzen you probably haven't heard of them man bun deep jianbing selfies heirloom prism food truck ugh squid celiac humblebrag.</p>
     </div>
     <div className="flex flex-wrap -m-4">
+    
       <div className="xl:w-1/4 md:w-1/2 p-4">
         <div className="bg-gray-100 p-6 rounded-lg">
           <img className="h-40 rounded w-full object-cover object-center mb-6" src="https://dummyimage.com/720x400" alt="content" />
@@ -44,6 +45,7 @@ const Hobbies:React.FC = () => {
           <p className="leading-relaxed text-base">Fingerstache flexitarian street art 8-bit waistcoat. Distillery hexagon disrupt edison bulbche.</p>
         </div>
       </div>
+      
     </div>
   </div>
 </section>
