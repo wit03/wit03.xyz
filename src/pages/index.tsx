@@ -1,5 +1,5 @@
 import React from 'react'
-import App from './_app'
+import App from './app'
 
 const Home: React.FC = () => {
   return (
