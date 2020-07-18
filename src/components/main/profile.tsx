@@ -17,7 +17,9 @@ const Profile: React.FC = () => {
             <br className='hidden lg:inline-block'>Hi I'm wit03</br>
           </h1>
           <p className='mb-8 leading-relaxed'>
-            An ordinary 16 years old software developer. I started coding since I was 11 from building minecraft plug-in. Right now I'm passioness with #WebDevelopment #IoT #Microcontroller and #MachineLearning
+            An ordinary 16 years old software developer. I started coding since
+            I was 11 from building minecraft plug-in. Right now I'm passioness
+            with #WebDevelopment #IoT #Microcontroller and #MachineLearning
           </p>
           <div className='flex justify-center'>
             <button className='inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg'>
