@@ -16,6 +16,10 @@
     "react-refresh": "^0.8.3"
   },
   "dependencies": {
+    "@chakra-ui/core": "^0.8.0",
+    "@emotion/core": "^10.0.28",
+    "@emotion/styled": "^10.0.27",
+    "emotion-theming": "^10.0.27",
     "next": "^9.4.4",
     "preact": "^10.4.6",
     "preact-render-to-string": "^5.1.10",
