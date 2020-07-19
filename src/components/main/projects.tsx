@@ -9,15 +9,18 @@ const Projects: React.FC = () => {
             Projects
           </h1>
           <p className='lg:w-1/2 w-full leading-relaxed text-base'>
-            I've learn a lot of coding skills through these projects. Some of them might just for fun but I think enjoy building stuff is what we need to be a good developer.
+            I've learn a lot of coding skills through these projects. Some of
+            them might just for fun but I think enjoy building stuff is what we
+            need to be a good developer.
           </p>
         </div>
         <div className='flex flex-wrap -m-4'>
           <div className='xl:w-1/3 md:w-1/2 p-4'>
             <div className='border border-gray-300 p-6 rounded-lg'>
-              
-              <span className="inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-normal text-indigo-500 mr-2 mb-3">#photography</span>
-              
+              <span className='inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-normal text-indigo-500 mr-2 mb-3'>
+                #photography
+              </span>
+
               <h2 className='text-lg text-gray-900 font-medium title-font mb-2'>
                 Shooting Stars
               </h2>
@@ -29,7 +32,9 @@ const Projects: React.FC = () => {
           </div>
           <div className='xl:w-1/3 md:w-1/2 p-4'>
             <div className='border border-gray-300 p-6 rounded-lg'>
-            <span className="inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-normal text-indigo-500 mr-2 mb-3">#photography</span>
+              <span className='inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-normal text-indigo-500 mr-2 mb-3'>
+                #photography
+              </span>
               <h2 className='text-lg text-gray-900 font-medium title-font mb-2'>
                 The Catalyzer
               </h2>
@@ -41,7 +46,9 @@ const Projects: React.FC = () => {
           </div>
           <div className='xl:w-1/3 md:w-1/2 p-4'>
             <div className='border border-gray-300 p-6 rounded-lg'>
-            <span className="inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-normal text-indigo-500 mr-2 mb-3">#photography</span>
+              <span className='inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-normal text-indigo-500 mr-2 mb-3'>
+                #photography
+              </span>
               <h2 className='text-lg text-gray-900 font-medium title-font mb-2'>
                 Neptune
               </h2>
@@ -53,7 +60,9 @@ const Projects: React.FC = () => {
           </div>
           <div className='xl:w-1/3 md:w-1/2 p-4'>
             <div className='border border-gray-300 p-6 rounded-lg'>
-            <span className="inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-normal text-indigo-500 mr-2 mb-3">#photography</span>
+              <span className='inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-normal text-indigo-500 mr-2 mb-3'>
+                #photography
+              </span>
               <h2 className='text-lg text-gray-900 font-medium title-font mb-2'>
                 Melanchole
               </h2>
@@ -65,7 +74,9 @@ const Projects: React.FC = () => {
           </div>
           <div className='xl:w-1/3 md:w-1/2 p-4'>
             <div className='border border-gray-300 p-6 rounded-lg'>
-            <span className="inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-normal text-indigo-500 mr-2 mb-3">#photography</span>
+              <span className='inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-normal text-indigo-500 mr-2 mb-3'>
+                #photography
+              </span>
               <h2 className='text-lg text-gray-900 font-medium title-font mb-2'>
                 Bunker
               </h2>
@@ -77,7 +88,9 @@ const Projects: React.FC = () => {
           </div>
           <div className='xl:w-1/3 md:w-1/2 p-4'>
             <div className='border border-gray-300 p-6 rounded-lg'>
-            <span className="inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-normal text-indigo-500 mr-2 mb-3">#photography</span>
+              <span className='inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-normal text-indigo-500 mr-2 mb-3'>
+                #photography
+              </span>
               <h2 className='text-lg text-gray-900 font-medium title-font mb-2'>
                 Ramona Falls
               </h2>

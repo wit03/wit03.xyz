@@ -1,11 +1,12 @@
 import React from 'react'
-import '../styles/tailwind.css'
-import "react-multi-carousel/lib/styles.css";
 
-import Profile from '../components/main/profile'
+import 'react-multi-carousel/lib/styles.css'
+import '../styles/tailwind.css'
+
 import Hobbies from '../components/main/hobbies'
-import Skills from '../components/main/skills'
+import Profile from '../components/main/profile'
 import Projects from '../components/main/projects'
+import Skills from '../components/main/skills'
 
 const App: React.FC = () => {
   return (

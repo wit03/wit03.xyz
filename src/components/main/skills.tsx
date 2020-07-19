@@ -24,7 +24,7 @@ const Skills: React.FC = () => {
               stroke-width='2'
               className='w-4 h-4 ml-2'
               viewBox='0 0 24 24'>
-              <path d='M5 12h14M12 5l7 7-7 7'></path>
+              <path d='M5 12h14M12 5l7 7-7 7' />
             </svg>
           </a>
         </div>
@@ -52,7 +52,9 @@ const Skills: React.FC = () => {
               <a className='text-gray-600 hover:text-gray-800'>Firebase</a>
             </li>
             <li className='lg:w-1/3 mb-1 w-1/2'>
-              <a className='text-gray-600 hover:text-gray-800'>Google Cloud Platform</a>
+              <a className='text-gray-600 hover:text-gray-800'>
+                Google Cloud Platform
+              </a>
             </li>
             <li className='lg:w-1/3 mb-1 w-1/2'>
               <a className='text-gray-600 hover:text-gray-800'>C/C++</a>
