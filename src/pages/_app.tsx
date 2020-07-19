@@ -1,5 +1,6 @@
 import React from 'react'
 import '../styles/tailwind.css'
+import "react-multi-carousel/lib/styles.css";
 
 import Profile from '../components/main/profile'
 import Hobbies from '../components/main/hobbies'
