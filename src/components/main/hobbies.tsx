@@ -1,5 +1,8 @@
 import React from 'react'
 import Carousel from 'react-multi-carousel'
+
+import { activity } from '../../store/activities'
+
 const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
@@ -43,27 +46,31 @@ const Hobbies: React.FC = () => {
           arrows={false}
           responsive={responsive}
           focusOnSelect={true}
-          containerClass='pb-5'>
+          containerClass='pb-8'>
+            {
+        activity.map((data) => (
           <div className='xl:w-5/6 md:w-5/6 p-4'>
-            <div className='bg-gray-100 p-6 rounded-lg mx-auto'>
-              <img
-                className='h-40 rounded w-full object-cover object-center mb-6'
-                src='https://dummyimage.com/720x400'
-                alt='content'
-              />
-              <h3 className='tracking-widest text-indigo-500 text-xs font-medium title-font'>
-                SUBTITLE
-              </h3>
-              <h2 className='text-lg text-gray-900 font-medium title-font mb-4'>
-                Chichen Itza
-              </h2>
-              <p className='leading-relaxed text-base'>
-                Fingerstache flexitarian street art 8-bit waistcoat. Distillery
-                hexagon disrupt edison bulbche.
-              </p>
-            </div>
+          <div className='bg-gray-100 p-6 rounded-lg mx-auto'>
+            <img
+              className='h-40 rounded w-full object-cover object-center mb-6'
+              src='https://dummyimage.com/720x400'
+              alt='content'
+            />
+            <h3 className='tracking-widest text-indigo-500 text-xs font-medium title-font'>
+              {data.tag}
+            </h3>
+            <h2 className='text-lg text-gray-900 font-medium title-font mb-4'>
+              {data.name}
+            </h2>
+            <p className='leading-relaxed text-base'>
+              {data.description}
+            </p>
           </div>
-          <div className='xl:w-5/6 md:w-5/6 p-4'>
+        </div>
+          ))
+        }
+          
+          {/*<div className='xl:w-5/6 md:w-5/6 p-4'>
             <div className='bg-gray-100 p-6 rounded-lg'>
               <img
                 className='h-40 rounded w-full object-cover object-center mb-6'
@@ -176,7 +183,7 @@ const Hobbies: React.FC = () => {
                 hexagon disrupt edison bulbche.
               </p>
             </div>
-          </div>
+  </div>*/}
         </Carousel>
       </div>
     </section>
