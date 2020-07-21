@@ -19,7 +19,7 @@ export const activity: activityTypes[] = [
         tag: "#camp",
         img: "",
         year: 2019,
-        description: "Junior Webmaster Camp is an intensive web development camp for highschooler which is aiming to solve social problems using website. I built projects.in.th that helps student to upload their projects and get mentorships from professional"
+        description: "Junior Webmaster Camp is an intensive web development camp. I built projects.in.th that helps student to upload their projects and get mentorships from professional"
     },
     {
         name: "Young Creators Camp 1",
