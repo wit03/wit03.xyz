@@ -12,7 +12,7 @@ export const activity: activityTypes[] = [
         tag: "#contest",
         img: "",
         year: 2020,
-        description: "KMUTT University's Super Computing contest. I created a paralell program using OMP and C/C++ to solve virus infection problems"
+        description: "KMUTT University's Super Computing contest. I was working with super computer using OMP Library and C/C++ to solve virus infection problems"
     },
     {
         name: "Best Social Innovation in Junior Webmaster Camp 11th",
