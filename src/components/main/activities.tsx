@@ -52,7 +52,8 @@ const Hobbies: React.FC = () => {
               <div className='bg-gray-100 p-6 rounded-lg mx-auto'>
                 <img
                   className='h-auto rounded w-full object-cover object-center mb-6'
-                  src='https://dummyimage.com/720x400'
+                  src='https://dummyimage.com/720x520'
+                  loading='lazy'
                   alt='content'
                 />
                 <h3 className='tracking-widest text-indigo-500 text-xs font-medium title-font'>
