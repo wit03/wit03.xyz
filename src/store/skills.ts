@@ -1,4 +1,4 @@
-const skills:String[] = [
+export const skills:String[] = [
     "React.js",
     "Vue.js",
     "Nodejs",
