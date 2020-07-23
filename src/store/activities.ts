@@ -1,7 +1,7 @@
 interface activityTypes {
     name: String,
     tag: String,
-    img: String,
+    img: string,
     year: Number,
     description: String
 }
