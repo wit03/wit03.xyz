@@ -7,7 +7,7 @@ const responsive = {
   largeDesktop: {
     breakpoint: { max: 3000, min: 1280 },
     items: 3,
-    slidesToSlide: 1, // optional, default to 1.
+    slidesToSlide: 3, // optional, default to 1.
   },
   tablet: {
     breakpoint: { max: 1280, min: 640 },
@@ -28,7 +28,7 @@ const Hobbies: React.FC = () => {
         <div className='flex flex-wrap w-full mb-20'>
           <div className='lg:w-1/2 w-full mb-6 lg:mb-0'>
             <h1 className='sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900'>
-              Hobbies
+              Activities
             </h1>
             <div className='h-1 w-20 bg-indigo-500 rounded' />
           </div>
