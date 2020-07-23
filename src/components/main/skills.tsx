@@ -1,5 +1,8 @@
 import React from 'react'
 
+import { skills } from '../../store/skills'
+import { activity } from '../../store/activities'
+
 const Skills: React.FC = () => {
   return (
     <section className='text-gray-700 body-font'>
@@ -33,44 +36,11 @@ const Skills: React.FC = () => {
             Technicals
           </h2>
           <nav className='flex flex-wrap list-none -mb-1'>
-            <li className='lg:w-1/3 mb-1 w-1/2'>
-              <a className='text-gray-600 hover:text-gray-800'>React.js</a>
-            </li>
-            <li className='lg:w-1/3 mb-1 w-1/2'>
-              <a className='text-gray-600 hover:text-gray-800'>Vuejs</a>
-            </li>
-            <li className='lg:w-1/3 mb-1 w-1/2'>
-              <a className='text-gray-600 hover:text-gray-800'>Nodejs</a>
-            </li>
-            <li className='lg:w-1/3 mb-1 w-1/2'>
-              <a className='text-gray-600 hover:text-gray-800'>MongoDB</a>
-            </li>
-            <li className='lg:w-1/3 mb-1 w-1/2'>
-              <a className='text-gray-600 hover:text-gray-800'>Postgres</a>
-            </li>
-            <li className='lg:w-1/3 mb-1 w-1/2'>
-              <a className='text-gray-600 hover:text-gray-800'>Firebase</a>
-            </li>
-            <li className='lg:w-1/3 mb-1 w-1/2'>
-              <a className='text-gray-600 hover:text-gray-800'>
-                Google Cloud Platform
-              </a>
-            </li>
-            <li className='lg:w-1/3 mb-1 w-1/2'>
-              <a className='text-gray-600 hover:text-gray-800'>C/C++</a>
-            </li>
-            <li className='lg:w-1/3 mb-1 w-1/2'>
-              <a className='text-gray-600 hover:text-gray-800'>OMP</a>
-            </li>
-            <li className='lg:w-1/3 mb-1 w-1/2'>
-              <a className='text-gray-600 hover:text-gray-800'>Python</a>
-            </li>
-            <li className='lg:w-1/3 mb-1 w-1/2'>
-              <a className='text-gray-600 hover:text-gray-800'>Tensorflow</a>
-            </li>
-            <li className='lg:w-1/3 mb-1 w-1/2'>
-              <a className='text-gray-600 hover:text-gray-800'>R</a>
-            </li>
+            {skills.map((data) => (
+              <li className='lg:w-1/3 mb-1 w-1/2'>
+                <a className='text-gray-600 hover:text-gray-800'>{data}</a>
+              </li>
+            ))}
           </nav>
         </div>
       </div>
