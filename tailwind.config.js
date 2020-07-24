@@ -1,5 +1,11 @@
 module.exports = {
-  purge: [],
+  purge: {
+    enabled: process.env.NODE_ENV === 'production',
+    content: [
+      'components/**/*.tsx',
+      'pages/**/*tsx'
+    ]
+  },
   target: 'relaxed',
   prefix: '',
   important: false,
