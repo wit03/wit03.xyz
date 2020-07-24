@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { projects } from 'store/projects';
+import { projects } from 'src/store/projects';
 
 const Projects:React.FC = () => {
   return (

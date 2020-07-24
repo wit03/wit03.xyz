@@ -28,9 +28,6 @@ const config = {
         };
       }
     }
-    config.resolve.alias['components'] = path.join(__dirname, 'src/components');
-    config.resolve.alias['store'] = path.join(__dirname, '/src/store');
-    config.resolve.alias['public'] = path.join(__dirname, './public');
     // Install webpack aliases:
     const aliases = config.resolve.alias || (config.resolve.alias = {});
     aliases.react = aliases['react-dom'] = 'preact/compat';

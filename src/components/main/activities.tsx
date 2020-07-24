@@ -1,7 +1,7 @@
 import React from 'react'
 import Carousel from 'react-multi-carousel'
 
-import { activity } from 'store/activities'
+import { activity } from 'src/store/activities'
 import { type } from 'os'
 
 const responsive = {

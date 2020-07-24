@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { skills } from 'store/skills'
+import { skills } from 'src/store/skills'
 
 const Skills: React.FC = () => {
   return (
