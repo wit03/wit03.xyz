@@ -47,7 +47,8 @@ const config = {
 
 module.exports = withPlugins([
   [optimizedImages, {
-    handleImages: ['jpeg', 'png'],
+    handleImages: ['jpeg', 'png', 'webp'],
+    optimizeImages: true,
     optimizeImagesInDev: true
   }]],
   withPrefresh(config));
