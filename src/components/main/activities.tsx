@@ -2,6 +2,7 @@ import React from 'react'
 import Carousel from 'react-multi-carousel'
 
 import { activity } from '../../store/activities'
+import { type } from 'os'
 
 const responsive = {
   largeDesktop: {
@@ -51,12 +52,17 @@ const Hobbies: React.FC = () => {
           {activity.map((data) => (
             <div className='xl:w-5/6 md:w-5/6 p-4'>
               <div className='bg-gray-100 p-6 rounded-lg mx-auto'>
-                <img
+                <picture>
+                  <source srcSet={require(`../../../public/img/activity/${data.img}.jpg?webp`)} type="image/webp" />
+                  <source srcSet={require(`../../../public/img/activity/${data.img}.jpg`)} type="image/jpeg" />
+                  <img
                   className='h-auto rounded w-full object-cover object-center mb-6'
                   src={require(`../../../public/img/activity/${data.img}.jpg`)}
                   loading='lazy'
                   alt='content'
-                />
+                />           
+                </picture>
+                
                 <h3 className='tracking-widest text-indigo-500 text-xs font-medium title-font'>
                   {data.tag}
                 </h3>

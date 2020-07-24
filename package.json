@@ -39,7 +39,8 @@
     "tslint-eslint-rules": "^5.4.0",
     "tslint-plugin-prettier": "^2.3.0",
     "tslint-react": "^5.0.0",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "webp-loader": "^0.6.0"
   },
   "license": "UNLICENSE"
 }
