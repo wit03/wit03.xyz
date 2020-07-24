@@ -1,5 +1,5 @@
 import React from 'react'
-import { educations } from '../../store/educations'
+import { educations } from 'store/educations'
 
 const Educations: React.FC = () => {
   return (

@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { skills } from '../../store/skills'
-import { activity } from '../../store/activities'
+import { skills } from 'store/skills'
 
 const Skills: React.FC = () => {
   return (
