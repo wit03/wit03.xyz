@@ -1,4 +1,6 @@
 const withPrefresh = require('@prefresh/next');
+const optimizedImages = require('next-optimized-images');
+const withPlugins = require('next-compose-plugins')
 
 const config = {
   experimental: {
@@ -43,4 +45,8 @@ const config = {
   }
 };
 
-module.exports = withPrefresh(config);
+module.exports = withPlugins([
+  [optimizedImages, {
+    handleImages: ['jpeg', 'png'],
+  }]],
+  withPrefresh(config));

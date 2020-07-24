@@ -22,6 +22,7 @@ const responsive = {
 }
 
 const Hobbies: React.FC = () => {
+  const jpeg = "1"
   return (
     <section className='text-gray-700 body-font'>
       <div className='container px-5 py-24 mx-auto'>
@@ -52,7 +53,7 @@ const Hobbies: React.FC = () => {
               <div className='bg-gray-100 p-6 rounded-lg mx-auto'>
                 <img
                   className='h-auto rounded w-full object-cover object-center mb-6'
-                  src='https://dummyimage.com/720x520'
+                  src={require(`../../../public/img/activity/${data.img}.jpg`)}
                   loading='lazy'
                   alt='content'
                 />
