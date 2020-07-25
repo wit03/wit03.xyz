@@ -26,7 +26,7 @@ const Projects:React.FC = () => {
               </span>
 
               <h2 className='text-lg text-gray-900 font-medium title-font mb-2'>
-                {data.name}
+                <a href={data.link}>{data.name}</a>
               </h2>
               <p className='leading-relaxed text-base'>
                 {data.description}

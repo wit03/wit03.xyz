@@ -2,7 +2,7 @@ interface Projects {
     name: String,
     tag: String,
     description: String,
-    link: String
+    link: string
 }
 
 export const projects: Projects[] = [
@@ -16,7 +16,7 @@ export const projects: Projects[] = [
         name: "Dusit Thani Blog",
         tag: "#web",
         description: "A blog for Dusit Thani Hotel located in Thailand.",
-        link: "dusitthaniwelove.com"
+        link: "https://dusitthaniwelove.com"
     },
     {
         name: "Optimized Plotter CNC",
