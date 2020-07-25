@@ -18,7 +18,7 @@ export const educations:educationTypes[] = [
         catagory: "Summmer Course",
         name: "Kwalicum Secondary School",
         year: "2016",
-        description: "Roong Aroon School is an alternative school that teaching students by project-based learning so we learn lots of thing from project research",
+        description: "I spent around 1 month at this school which is located in Vancouver Island, Canada. I was a good exprience for me since I've never been to North America",
         link: "http://roong-aroon.ac.th"
     }
 ]
