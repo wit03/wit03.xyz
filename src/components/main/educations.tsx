@@ -19,9 +19,9 @@ const Educations: React.FC = () => {
               <span className='mt-1 text-gray-500 text-sm'>{data.year}</span>
             </div>
             <div className='md:flex-grow'>
-              <h2 className='text-2xl font-medium text-gray-900 title-font mb-2'>
-                {data.name}
-              </h2>
+              <div className='text-2xl text-gray-900 title-font mb-2 flex flex-row'>
+        <h2 className='font-medium'>{data.name}</h2><h2 className='text-gray-700 font-thin'>, {data.location}</h2>
+              </div>
               <p className='leading-relaxed'>
                 {data.description}
               </p>
