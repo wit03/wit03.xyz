@@ -20,7 +20,7 @@ const Educations: React.FC = () => {
             </div>
             <div className='md:flex-grow'>
               <div className='text-2xl text-gray-900 title-font mb-2 flex flex-row'>
-        <h2 className='font-medium'>{data.name}</h2><h2 className='text-gray-700 font-thin'>, {data.location}</h2>
+        <h2 className='flex font-medium flex-wrap'>{data.name}<h2 className='text-gray-700 font-thin'>, {data.location}</h2></h2>
               </div>
               <p className='leading-relaxed'>
                 {data.description}
