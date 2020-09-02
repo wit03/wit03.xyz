@@ -47,7 +47,7 @@ export const activity: activityTypes[] = [
         tag: "#event",
         img: "6",
         year: 2018,
-        description: "I talked about my IoT project at home using arduino-based microcontroller and websocket to control the lights."
+        description: "I talked about my IoT project at home using arduino-based (ESP8266 NodeMCU) with website built by ionic framework and websocket to control the lights and doors. "
     },
     {
         name: "Google I/O Extended 2019",

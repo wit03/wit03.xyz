@@ -2,7 +2,6 @@ import React from 'react'
 import Carousel from 'react-multi-carousel'
 
 import { activity } from 'src/store/activities'
-import { type } from 'os'
 
 const responsive = {
   largeDesktop: {
@@ -35,10 +34,7 @@ const Hobbies: React.FC = () => {
             <div className='h-1 w-20 bg-indigo-500 rounded' />
           </div>
           <p className='lg:w-1/2 w-full leading-relaxed text-base'>
-            Whatever I'm doing I take it serious, brooklyn asymmetrical
-            gentrify, subway tile poke farm-to-table. Franzen you probably
-            haven't heard of them man bun deep jianbing selfies heirloom prism
-            food truck ugh squid celiac humblebrag.
+            I've joined tons of both offline and online event about coding. 
           </p>
         </div>
         <Carousel

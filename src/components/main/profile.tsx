@@ -5,11 +5,16 @@ const Profile: React.FC = () => {
     <section className='text-gray-700 body-font'>
       <div className='container mx-auto flex px-5 py-24 md:flex-row flex-col items-center min-h-screen'>
         <div className='lg:max-w-lg lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0'>
-          <img
-            className='object-cover object-center rounded-full h-600 w-600'
-            alt='hero'
-            src='https://dummyimage.com/600x600'
-          />
+          <picture>
+                  <source srcSet={require(`public/img/profile.jpg?webp`)} type="image/webp" />
+                  <source srcSet={require(`public/img/profile.jpg`)} type="image/jpeg" />
+                  <img
+                  className='object-cover object-center rounded-full h-600 w-600'
+                  src={require(`public/img/profile.jpg`)}
+                  loading='lazy'
+                  alt='content'
+                />           
+                </picture>
         </div>
         <div className='lg:flex-grow md:w-1/2 lg:pl-24 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center'>
           <h1 className='title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900'>
