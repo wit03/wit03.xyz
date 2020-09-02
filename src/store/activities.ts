@@ -50,6 +50,13 @@ export const activity: activityTypes[] = [
         description: "I talked about my IoT project at home using arduino-based (ESP8266 NodeMCU) with website built by ionic framework and websocket to control the lights and doors. "
     },
     {
+        name: "Hactoberfest 2018",
+        tag: "#hackathon",
+        img: "8",
+        year: 2018,
+        description: "An online event that helps newbie developer contributing to open-source projects on github. I've done 8 pull requests about web development on random repositories"
+    },
+    {
         name: "Google I/O Extended 2019",
         tag: "#meetup",
         img: "7",
@@ -58,17 +65,17 @@ export const activity: activityTypes[] = [
 
     },
     {
+        name: "Hacktoberfest 2019",
+        tag: "#hackathon",
+        img: "9",
+        year: 2019,
+        description: "An online event that helps newbie developer contributing to open-source projects on github. This year I've done 5 pull requests about web developer and I got a t-shirt."
+    },
+    {
         name: "Stupid Hackathon #3",
         tag: "#hackathon",
-        img: "1",
+        img: "10",
         year: 2019,
         description: "A two days hackathon that participants should build a project that no one needs and just for sake of fun. This is my second hackathon of my life."
     },
-    {
-        name: "Young Digital Maker 200hrs",
-        tag: "#camp",
-        img: "1",
-        year: 2017,
-        description: "I learned about the principle of microcontroller and IoTs and how to implement it with application or web"
-    }
 ]
