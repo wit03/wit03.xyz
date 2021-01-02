@@ -6,7 +6,6 @@ module.exports = {
       'src/pages/**/*tsx'
     ]
   },
-  target: 'relaxed',
   prefix: '',
   important: false,
   separator: ':',
