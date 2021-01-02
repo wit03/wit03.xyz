@@ -25,7 +25,7 @@ const Projects:React.FC = () => {
           {
             projects.map((data) => (
               <div className='xl:w-1/3 md:w-1/2 p-4'>
-            <div className='border border-gray-300 p-6 rounded-lg'>
+            <div className='border-2 border-gray-200 p-6 rounded-lg'>
               <span className='inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-normal text-indigo-500 mr-2 mb-3'>
                 {data.tag}
               </span>
