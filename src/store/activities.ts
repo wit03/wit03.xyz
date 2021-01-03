@@ -8,6 +8,14 @@ interface activityTypes {
 
 export const activity: activityTypes[] = [
     {
+        name: "Organizer on Hactoberfest TH 2020",
+        tag: "#event",
+        img: "11",
+        year: 2020,
+        description: "As an organizer, I was taking care of Workshop track in the event, and also help others to accomplish their contribution on GitHub"
+
+    },
+    {
         name: "1st Runner up on KSCC 2020",
         tag: "#contest",
         img: "1",
