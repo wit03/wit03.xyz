@@ -1,13 +1,9 @@
+import { NONAME } from 'dns';
 import React from 'react'
 
 import { projects } from 'src/store/projects';
 
 const Projects:React.FC = () => {
-  const redirectHandler = (e: React.MouseEvent) => {
-    e.preventDefault();
-    window.open('https://www.github.com/wit03')
-  }
-
   return (
     <section className='text-gray-700 body-font'>
       <div className='container px-5 py-24 mx-auto'>
@@ -41,8 +37,10 @@ const Projects:React.FC = () => {
             ))
           }
         </div>
-        <button className='flex mx-auto mt-16 text-indigo-500 border-0 py-2 px-8 focus:outline-none hover:text-indigo-600 text-lg' onClick={redirectHandler}>
+        <button className='flex mx-auto mt-16 text-indigo-500 border-0 py-2 px-8 focus:outline-none hover:text-indigo-600 text-lg'>
+          <a href="https://www.github.com/wit03" style={{ textDecoration: "none" }} target="_blank">
           + more
+          </a>
         </button>
       </div>
     </section>
