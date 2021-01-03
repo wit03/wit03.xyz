@@ -1,10 +1,10 @@
 interface educationTypes {
-    catagory: String,
-    name: String,
-    year: String,
-    description: String,
-    link: String,
-    location: String
+    catagory: string,
+    name: string,
+    year: string,
+    description: string,
+    link: string,
+    location: string
 }
 
 export const educations:educationTypes[] = [
