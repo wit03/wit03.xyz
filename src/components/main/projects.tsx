@@ -23,8 +23,8 @@ const Projects:React.FC = () => {
         </div>
         <div className='flex flex-wrap -m-4'>
           {
-            projects.map((data) => (
-              <div className='xl:w-1/3 md:w-1/2 p-4'>
+            projects.map((data, i) => (
+              <div className='xl:w-1/3 md:w-1/2 p-4' key={i}>
             <div className='border-2 border-gray-200 p-6 rounded-lg'>
               <span className='inline-block bg-indigo-100 rounded-full px-3 py-1 text-sm font-normal text-indigo-500 mr-2 mb-3'>
                 {data.tag}

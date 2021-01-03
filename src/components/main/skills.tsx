@@ -35,8 +35,8 @@ const Skills: React.FC = () => {
             Technicals
           </h2>
           <nav className='flex flex-wrap list-none -mb-1'>
-            {skills.map((data) => (
-              <li className='lg:w-1/3 mb-1 w-1/2'>
+            {skills.map((data, i) => (
+              <li className='lg:w-1/3 mb-1 w-1/2' key={i}>
                 <a className='text-gray-600 hover:text-gray-800'>{data}</a>
               </li>
             ))}
