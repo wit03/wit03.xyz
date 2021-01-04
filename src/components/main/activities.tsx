@@ -47,7 +47,7 @@ const Hobbies: React.FC = () => {
           containerClass='pb-8'>
           {activity.map((data, i) => (
             <div className='xl:w-5/6 md:w-5/6 p-4' key={i}>
-              <div className='bg-gray-100 p-6 rounded-lg mx-auto'>
+              <div className='bg-gray-100 p-6 rounded-xl mx-auto'>
                 <picture>
                   <source srcSet={require(`public/img/activity/${data.img}.jpg?webp`)} type="image/webp" />
                   <source srcSet={require(`public/img/activity/${data.img}.jpg`)} type="image/jpeg" />

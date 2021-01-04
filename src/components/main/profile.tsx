@@ -27,10 +27,10 @@ const Profile: React.FC = () => {
             with #WebDevelopment #IoT #Microcontroller and #MachineLearning
           </p>
           <div className='flex justify-center'>
-            <button className='inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg'>
+            <button className='rounded-full inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg'>
               Learn More
             </button>
-            <button className='ml-4 inline-flex text-gray-700 bg-gray-200 border-0 py-2 px-6 focus:outline-none hover:bg-gray-300 rounded text-lg'>
+            <button className='rounded-full ml-4 inline-flex text-gray-700 bg-gray-200 border-0 py-2 px-6 focus:outline-none hover:bg-gray-300 rounded text-lg'>
               PDF CV
             </button>
           </div>
