@@ -1,0 +1,91 @@
+#toggle-mode-cb {
+  display: none;
+}
+
+#toggle-mode {
+  position: absolute;
+  z-index: 999;
+  top: 0;
+  right: 0;
+  margin: 20px;
+}
+#toggle-mode .toggle-border {
+  border: 2px solid #b1b1b1;
+  width: 70px;
+  height: 35px;
+  display: block;
+  border-radius: 20px;
+  position: relative;
+}
+#toggle-mode #toggle-indicator {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 0px;
+  position: absolute;
+  background-color: rgba(26, 32, 44, 1);
+  top: 3px;
+  left: 3px;
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+#toggle-mode #toggle-indicator::after {
+    content: '';
+    width: 22px;
+    height: 22px;
+    border: 0px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -3px;
+    right: 5px;
+    background-color: rgba(26, 32, 44, 1);
+}
+
+#mode-wrapper {
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  font-family: sans-serif;
+  font-size: 2rem;
+}
+#mode-wrapper .mode {
+  transition: all 0.3s ease-in-out;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#mode-wrapper {
+  background-color: white;
+  color: rgba(26, 32, 44,1);
+}
+#mode-wrapper .mode__light {
+  opacity: 1;
+}
+#mode-wrapper .mode__dark {
+  opacity: 0;
+}
+
+#toggle-mode-cb:checked + #mode-wrapper {
+  background-color:rgba(26, 32, 44,1);
+  color: gray;
+}
+#toggle-mode-cb:checked + #mode-wrapper .mode__light {
+  opacity: 0;
+}
+#toggle-mode-cb:checked + #mode-wrapper .mode__dark {
+  opacity: 1;
+}
+#toggle-mode-cb:checked + #mode-wrapper .toggle-border {
+  border-color: rgb(182, 182, 182);
+}
+#toggle-mode-cb:checked + #toggle-mode #toggle-indicator {
+    background-color: #ffffff;
+}
+#toggle-mode-cb:checked + #mode-wrapper #toggle-indicator {
+  background-color: #bada55;
+  left: calc(65px - 28px);
+  transform: rotate(180deg);
+}

@@ -1,4 +1,9 @@
 module.exports = {
+  future: {
+    removeDeprecatedGapUtilities: true,
+    purgeLayersByDefault: true,
+  },
+  darkMode: 'class',
   purge: {
     enabled: process.env.NODE_ENV === 'production',
     content: [
@@ -155,7 +160,7 @@ module.exports = {
       '56': '14rem',
       '64': '16rem',
     },
-    backgroundColor: theme => theme('colors'),
+   // backgroundColor: theme => theme('colors'),
     backgroundOpacity: theme => theme('opacity'),
     backgroundPosition: {
       bottom: 'bottom',
@@ -191,6 +196,7 @@ module.exports = {
     borderWidth: {
       default: '1px',
       '0': '0',
+      '1': '1',
       '2': '2px',
       '4': '4px',
       '8': '8px',
@@ -631,6 +637,14 @@ module.exports = {
     },
   },
   variants: {
+    extend: {
+      backgroundColor: ['dark'],
+      backgroundOpacity: ['dark'],
+      textColor: ['dark'],
+      textOpacity: ['dark'],
+      borderColor: ['dark'],
+      borderOpacity: ['dark']
+    },
     accessibility: ['responsive', 'focus'],
     alignContent: ['responsive'],
     alignItems: ['responsive'],
@@ -730,6 +744,7 @@ module.exports = {
     transitionDuration: ['responsive'],
     transitionDelay: ['responsive'],
   },
+  
   corePlugins: {},
   plugins: [],
 }

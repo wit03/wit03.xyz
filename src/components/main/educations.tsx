@@ -3,32 +3,32 @@ import { educations } from 'src/store/educations'
 
 const Educations: React.FC = () => {
   return (
-    <section className='text-gray-600 body-font overflow-hidden'>
+    <section className='text-gray-600 body-font overflow-hidden dark:text-gray-400 dark:bg-gray-900'>
       <div className='container px-5 py-24 mx-auto'>
-        <h1 className='sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900 pb-2'>
+        <h1 className='sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900 pb-2 dark:text-white'>
           Educations
         </h1>
-        <div className='-my-8 divide-y-2 divide-gray-100'>
+        <div className='-my-8 divide-y-2 divide-gray-600 dark:divide-gray-700 dark:border-opacity-75'>
           {educations.map((data, i) => (
             <div className='py-8 flex flex-wrap md:flex-nowrap' key={i}>
               <div className='md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col'>
-                <span className='font-semibold title-font text-gray-700'>
+                <span className='font-semibold title-font text-gray-700 dark:text-gray-200'>
                   {data.catagory}
                 </span>
                 <span className='mt-1 text-gray-500 text-sm'>{data.year}</span>
               </div>
               <div className='md:flex-grow'>
                 <h2 className='text-2xl font-medium text-gray-900 title-font mb-2'>
-                  <h2 className='flex font-medium flex-wrap'>
+                  <h2 className='flex font-medium flex-wrap dark:text-white'>
                     {data.name}
-                    <h2 className='text-gray-700 font-thin'>
+                    <h2 className='text-gray-700 font-thin dark:text-gray-200'>
                       , {data.location}
                     </h2>
                   </h2>
                 </h2>
                 <p className='leading-relaxed'>{data.description}</p>
                 <a
-                  className='text-indigo-500 inline-flex items-center mt-4'
+                  className='text-indigo-500 inline-flex items-center mt-4 dark:text-indigo-400'
                   href={data.link}
                   target='_blank'>
                   Learn More
