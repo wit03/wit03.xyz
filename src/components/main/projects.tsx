@@ -12,8 +12,8 @@ const Projects:React.FC = () => {
             Projects
           </h1>
           <p className='lg:w-1/2 w-full leading-relaxed text-base dark:text-opacity-80'>
-            I've learn a lot of coding skills through these projects. Some of
-            them might just for fun but I think enjoy building stuff is what we
+            I received a lot of coding skills through these projects. Some of
+            them might just for fun, but I believe that enjoy building stuff is what we
             need to be a good developer.
           </p>
         </div>

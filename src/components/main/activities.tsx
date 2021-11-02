@@ -34,7 +34,7 @@ const Hobbies: React.FC = () => {
             <div className='h-1 w-20 bg-indigo-500 rounded' />
           </div>
           <p className='lg:w-1/2 w-full leading-relaxed text-base dark:text-gray-400'>
-            I've joined tons of both offline and online event, contest, meetup and hackathon about coding.
+            I have joined tons of both offline and online event, contest, meetup and hackathon about coding.
           </p>
         </div>
         <Carousel

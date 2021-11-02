@@ -11,24 +11,8 @@ const Skills: React.FC = () => {
             Skills
           </h1>
           <p className='leading-relaxed text-base'>
-            Locavore cardigan small batch roof party blue bottle blog meggings
-            sartorial jean shorts kickstarter migas sriracha church-key synth
-            succulents. Actually taiyaki neutra, distillery gastropub pok pok
-            ugh.
+            Since grade five, i have been spending my time on my interested fields such as Web Development, Machine Learning, Compeititive Programming, and I have learn a lot throughout my time.
           </p>
-          <a className='text-indigo-500 inline-flex items-center mt-4 dark:text-indigo-400'>
-            Learn More
-            <svg
-              fill='none'
-              stroke='currentColor'
-              stroke-linecap='round'
-              stroke-linejoin='round'
-              stroke-width='2'
-              className='w-4 h-4 ml-2'
-              viewBox='0 0 24 24'>
-              <path d='M5 12h14M12 5l7 7-7 7' />
-            </svg>
-          </a>
         </div>
         <div className='flex flex-col md:w-1/2 md:pl-12'>
           <h2 className='title-font font-medium text-gray-800 tracking-widest text-sm mb-3 dark:text-white'>

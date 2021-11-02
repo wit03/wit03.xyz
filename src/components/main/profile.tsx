@@ -28,12 +28,12 @@ const Profile: React.FC = () => {
             <br className='hidden lg:inline-block'>Hi I'm wit03</br>
           </h1>
           <p className='mb-8 leading-relaxed'>
-            An ordinary 16 years old software developer. I started coding since
-            I was 11 from building minecraft plug-in. Right now I'm passioness
+            An ordinary 18 years old software developer. I started coding since
+            I was 11 from building minecraft plug-in. Now, i am passionate
             with #WebDevelopment #IoT #Microcontroller and #MachineLearning
           </p>
           <div className='flex justify-center'>
-            <button className='rounded-full inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg'>
+            <button onClick={()=> location.href="https://github.com/wit03"} className='rounded-full inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg'>
               Learn More
             </button>
             <button className='rounded-full ml-4 inline-flex text-gray-700 dark:text-gray-400 bg-gray-200 dark:bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-300 rounded text-lg'>

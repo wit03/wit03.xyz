@@ -48,7 +48,7 @@ export const activity: activityTypes[] = [
         tag: "#event",
         img: "5",
         year: 2019,
-        description: "Google Code-in is a contest for pre-university student to contribute to open-source softwares. I've done 3 react.js website for an organization called OpenRMS"
+        description: "Google Code-in is a contest for pre-university student to contribute to open-source softwares. I have done 3 react.js website for an organization called OpenRMS"
     },
     {
         name: "Speaker at Digital Thailand 2018",
@@ -62,14 +62,14 @@ export const activity: activityTypes[] = [
         tag: "#hackathon",
         img: "8",
         year: 2018,
-        description: "An online event that helps newbie developer contributing to open-source projects on github. I've done 8 pull requests about web development on random repositories"
+        description: "An online event that helps newbie developer contributing to open-source projects on github. I have done 8 pull requests about web development on random repositories"
     },
     {
         name: "Google I/O Extended 2019",
         tag: "#meetup",
         img: "7",
         year: 2019,
-        description: "This is Google I/O meetup organized by Google Development Group Thailand. I've learned about new technologies shipped from google such as some new web api."
+        description: "This is Google I/O meetup organized by Google Development Group Thailand. I learned about new technologies shipped from google such as some new web api."
 
     },
     {
@@ -77,7 +77,7 @@ export const activity: activityTypes[] = [
         tag: "#hackathon",
         img: "9",
         year: 2019,
-        description: "An online event that helps newbie developer contributing to open-source projects on github. This year I've done 5 pull requests about web developer and I got a t-shirt."
+        description: "An online event that helps newbie developer contributing to open-source projects on github. This year I have done 5 pull requests about web developer and I got a t-shirt."
     },
     {
         name: "Stupid Hackathon #3",
