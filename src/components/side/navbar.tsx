@@ -1,5 +1,6 @@
 import React from 'react'
 
+
 const Navbar: React.FC = () => {
     return (
         <nav
@@ -9,9 +10,9 @@ const Navbar: React.FC = () => {
           items-center
           justify-end
           w-full
-          py-4
+          py-5
           md:py-0
-          px-4
+          px-5
           text-lg text-gray-700
           bg-white
           bg-opacity-75
@@ -25,6 +26,7 @@ const Navbar: React.FC = () => {
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                onClick={()=> document.querySelector("#menu").classList.toggle('hidden')}
             >
                 <path
                     stroke-linecap="round"
@@ -49,7 +51,7 @@ const Navbar: React.FC = () => {
                         >
                     </li>
                     <li>
-                        <a className="md:p-4 py-2 block text-gray-400" href="#"
+                        <a className="md:p-4 hidden py-2 md:block text-gray-400" href="#"
                         >|</a
                         >
                     </li>
@@ -59,7 +61,7 @@ const Navbar: React.FC = () => {
                         >
                     </li>
                     <li>
-                        <a className="md:p-4 py-2 block text-gray-400" href="#"
+                        <a className="md:p-4 hidden py-2 md:block text-gray-400" href="#"
                         >|</a
                         >
                     </li>

@@ -4,7 +4,7 @@ import Typewriter from 'typewriter-effect'
 const Profile: React.FC = () => {
   return (
     <section className='text-gray-700 body-font dark:text-gray-400 dark:bg-gray-900'>
-      <div className='container mx-auto flex px-5 py-24 md:flex-row flex-col items-center min-h-screen'>
+      <div className='container mx-auto flex px-5 py-20 md:flex-row flex-col items-center min-h-screen justify-evenly'>
         <div className='lg:max-w-md lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0 rounded-full shadow-2xl'>
           <picture>
             <source
