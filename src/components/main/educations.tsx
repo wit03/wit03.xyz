@@ -8,7 +8,7 @@ const Educations: React.FC = () => {
         <h1 className='sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900 pb-2 dark:text-white'>
           Educations
         </h1>
-        <div className='-my-8 divide-y-2 divide-gray-600 dark:divide-gray-700 dark:border-opacity-75'>
+        <div className='-my-8 divide-y-2 divide-gray-200 dark:divide-gray-500 dark:border-opacity-75'>
           {educations.map((data, i) => (
             <div className='py-8 flex flex-wrap md:flex-nowrap' key={i}>
               <div className='md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col'>
