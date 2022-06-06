@@ -5,10 +5,13 @@ const Educations: React.FC = () => {
   return (
     <section className='text-gray-600 body-font overflow-hidden dark:text-gray-400 dark:bg-gray-900'>
       <div className='container px-5 py-24 mx-auto'>
-        <h1 className='sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900 pb-2 dark:text-white'>
+       
+        <h1 className='sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900 dark:text-white'>
           Educations
         </h1>
-        <div className='-my-8 divide-y-2 divide-gray-200 dark:divide-gray-500 dark:border-opacity-75'>
+        <div className='h-1 w-20 bg-indigo-500 rounded' />
+
+        <div className='-my-8 pt-8 dark:border-opacity-75'>
           {educations.map((data, i) => (
             <div className='py-8 flex flex-wrap md:flex-nowrap' key={i}>
               <div className='md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col'>
