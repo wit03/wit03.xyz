@@ -26,10 +26,10 @@ export const educations:educationTypes[] = [
     },
     {
         catagory: "Bachelor's degree",
-        name: "Computer Engineering",
+        name: "Computer Engineering (International Program)",
         year: "2022-Now",
-        description: 'As my field of interests were pointed towards the computers, I want to study more about the fundamentals and low-level computing. I have recieved a fully-funded "Petchre Pra Jom Klao" scholarship.',
-        link: "https://www.sd69.bc.ca/school/KSS/Pages/default.aspx",
+        description: 'I have recieved a fully-funded "Petchre Pra Jom Klao" scholarship. As my field of interests were pointed towards the computers, I want to study more about the fundamentals and low-level computing.',
+        link: "https://cpe.kmutt.ac.th/en/index",
         location: "KMUTT, Thailand"
     }
 ]

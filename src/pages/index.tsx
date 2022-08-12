@@ -12,8 +12,8 @@ import Navbar from 'src/components/side/navbar'
 const Home: React.FC = () => {
   return (
     <React.Fragment>
-      <Navbar/>
-      <ModeToggle />
+      {/* <Navbar/>
+      <ModeToggle /> */}
       <Profile />
       <Projects />
       <Skills />

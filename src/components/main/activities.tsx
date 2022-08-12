@@ -52,7 +52,7 @@ const Hobbies: React.FC = () => {
                   <source srcSet={require(`public/img/activity/${data.img}.jpg?webp`)} type="image/webp" />
                   <source srcSet={require(`public/img/activity/${data.img}.jpg`)} type="image/jpeg" />
                   <img
-                  className='h-auto rounded w-full object-cover object-center mb-6'
+                  className='h-auto rounded-xl w-full object-cover object-center mb-6'
                   src={require(`public/img/activity/${data.img}.jpg`)}
                   loading='lazy'
                   alt='content'
