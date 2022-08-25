@@ -8,7 +8,7 @@ const ModeToggle: React.FC = () => {
   const { theme, setTheme } = useTheme()
   React.useEffect(() => {
     setIsMounted(true)
-    setTheme("light")
+    setTheme("dark")
   }, [])
 
   return (

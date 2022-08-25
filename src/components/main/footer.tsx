@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
           </svg>
 
         </a>
-        <p className="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">
+        <p className="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-400 sm:py-2 sm:mt-0 mt-4">
           © Jarukit Jintanasathirakul —
           <a
             href='https://github.com/wit03'
