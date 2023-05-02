@@ -41,6 +41,24 @@ export const projects: Projects[] = [
         tag: "#api",
         description: "PM2.5 Rest API for my school using Express.js and Node.js",
         link: "https://github.com/roong-aroon-developer/Roong-Aroon-PM25-API"
+    },
+    {
+        name: "RA Event",
+        tag: "#web",
+        description: "A PWA web app using Reactjs and MongoDB for school announcement",
+        link: "https://github.com/roong-aroon-developer/RA-Event"
+    },
+    {
+        name: "Digital Garden",
+        tag: "#web",
+        description: "A digital garden made by Gatsbyjs and DatoCMS",
+        link: "https://garden.wit03.me"
+    },
+    {
+        name: "J.A.R.W.I.T",
+        tag: "#chatbot",
+        description: "An automation system for controlling smart home devices and miscellaneous stuff.",
+        link: "https://github.com/wit03/J.A.R.W.I.T"
     }
 
 ]
