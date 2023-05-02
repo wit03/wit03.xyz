@@ -32,7 +32,7 @@ const Profile: React.FC = () => {
             />
           </h1>
           <p className='mb-8 leading-relaxed'>
-            An ordinary 18 years old Full Stack Software Developer, Crypto Believer, Keyboard Enthusiastist and Certified Scuba Driver.
+            An ordinary 19 years old Full Stack Software Developer, Crypto Believer, Keyboard Enthusiastist and Certified Scuba Driver.
           </p>
           <div className='flex justify-center'>
             <button onClick={() => location.href = "https://github.com/wit03"} className='rounded-full inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg'>

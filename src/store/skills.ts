@@ -1,7 +1,8 @@
 export const skills:String[] = [
     "React.js",
-    "Vue.js",
+    "Next.js",
     "Nodejs",
+    "TypeScript",
     "Postgres",
     "MongoDB",
     "Firebase",

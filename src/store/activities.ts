@@ -8,7 +8,14 @@ interface activityTypes {
 
 export const activity: activityTypes[] = [
     {
-        name: "Organizer on Hactoberfest TH 2020",
+        name: "Speaker at React Meetup Thailand 2022",
+        tag: "#event",
+        img: "13",
+        year: 2022,
+        description: "I was giving a talk about the value of <React.StrictMode> in the development process of a web app."
+    },
+    {
+        name: "Organizer at Hactoberfest TH 2020",
         tag: "#event",
         img: "11",
         year: 2020,
@@ -21,13 +28,6 @@ export const activity: activityTypes[] = [
         img: "1",
         year: 2020,
         description: "KMUTT University's Super Computing contest. I was working with super computer using OMP Library and C/C++ to solve virus infection problems"
-    },
-    {
-        name: "Stupid Hackathon #2",
-        tag: "#hackathon",
-        img: "2",
-        year: 2018,
-        description: "A two days hackathon that participants should build a project that no one needs and just for sake of fun. This is my first hackathon of my life."
     },
     {
         name: "Best Social Innovation in Junior Webmaster Camp 11th",
@@ -85,5 +85,12 @@ export const activity: activityTypes[] = [
         img: "10",
         year: 2019,
         description: "A two days hackathon that participants should build a project that no one needs and just for sake of fun. This is my second hackathon of my life."
+    },
+    {
+        name: "Stupid Hackathon #2",
+        tag: "#hackathon",
+        img: "2",
+        year: 2018,
+        description: "A two days hackathon that participants should build a project that no one needs and just for sake of fun. This is my first hackathon of my life."
     },
 ]
