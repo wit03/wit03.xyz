@@ -1,0 +1,57 @@
+@theme {
+    --color-base: #101010;
+    --color-sec: #a476ff;
+    --color-white: #dfdfdf;
+    --color-white-icon: #f3f3f398;
+    --color-white-icon-tr: #f3f3f310;
+
+    --font-montserrat: "montserrat", -apple-system, system-ui, sans-serif;
+
+    --animate-scroll: scroll 60s linear infinite;
+    --animate-scroll-md: scroll 50s linear infinite;
+
+    @keyframes scroll {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+
+    --animate-shine: shine 3s linear infinite;
+    @keyframes shine {
+    0% {
+      background-position: 100% 50%;
+    }
+    30%,
+    70% {
+      background-position: 0% 50%;
+    }
+  }
+}
+
+::selection {
+  background-color: theme(--color-sec);
+  color: theme(--color-base);
+}
+
+/* extend: {
+      keyframes: {
+        scaleAnim: {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.1)' },
+          '100%': { transform: 'scale(1)' },
+        },
+        scroll: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+      },
+      animation: {
+        scale: 'scaleAnim 300ms ease-in-out',
+        scroll: 'scroll 60s linear infinite',
+        'scroll-md': 'scroll 50s linear infinite',
+        paused: 'none',
+      },
+    }, */
