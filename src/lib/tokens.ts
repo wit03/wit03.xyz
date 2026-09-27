@@ -1,7 +1,16 @@
 // Canvas code can't use CSS variables directly, so read the theme tokens once
 // and refresh them whenever the theme changes (OS setting or the toggle).
 
-export type Tokens = { accent: string; muted: string; line: string; ink: string; surface: string; dark: boolean }
+export type Tokens = {
+  accent: string
+  muted: string
+  line: string
+  ink: string
+  surface: string
+  bg: string
+  deep: string
+  dark: boolean
+}
 
 let cache: Tokens | null = null
 let watching = false
@@ -15,6 +24,8 @@ function read(): Tokens {
     line: v('--line'),
     ink: v('--ink'),
     surface: v('--surface'),
+    bg: v('--bg'),
+    deep: v('--deep'),
     dark: s.colorScheme.includes('dark'),
   }
 }
