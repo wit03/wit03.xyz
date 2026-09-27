@@ -100,7 +100,7 @@ export default function Hero({ handle, name, tagline, status, links }: Props) {
     <section
       ref={heroRef}
       id='top'
-      className='relative mt-12 grid grid-cols-[auto_1fr] items-center gap-7 will-change-transform max-sm:grid-cols-1 max-sm:gap-4'
+      className='relative mt-12 grid grid-cols-[auto_1fr] items-center gap-7 will-change-transform max-sm:mt-7 max-sm:grid-cols-1 max-sm:gap-3'
     >
       <canvas
         ref={trailRef}

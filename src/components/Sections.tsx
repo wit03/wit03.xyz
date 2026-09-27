@@ -6,7 +6,7 @@ import { external } from '@/lib/links'
 
 function Shell({ section, children }: { section: Section; children: ReactNode }) {
   return (
-    <section id={section.id} className='mt-16 grid scroll-mt-5 gap-4'>
+    <section id={section.id} className='mt-16 grid scroll-mt-5 gap-4 max-sm:mt-12'>
       <div className='flex items-baseline justify-between border-b border-line pb-2'>
         <h2 className='label' data-decode>
           {section.title}
