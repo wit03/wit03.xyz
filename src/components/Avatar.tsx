@@ -20,11 +20,14 @@ type Bubble = { x: number; y: number; vy: number; age: number; seed: number; big
 export default function Avatar({ label }: { label: string }) {
   const ref = useRef<HTMLCanvasElement>(null)
   const diveRef = useRef(false)
+  // Reduced motion: no animation loop, just redraw a still frame when the dive toggles.
+  const redrawRef = useRef(() => {})
   const [diving, setDiving] = useState(false)
 
   const toggle = () => {
     diveRef.current = !diveRef.current
     setDiving(diveRef.current)
+    redrawRef.current()
   }
 
   useEffect(() => {
@@ -191,7 +194,6 @@ export default function Avatar({ label }: { label: string }) {
         s.wasDiving = diving
         s.diveStart = t
         s.bubbles = []
-        if (reduce) s.wl = diving ? -2 : N + 1
       }
       if (t > s.nextBlink) {
         s.blinkUntil = t + 140
@@ -203,15 +205,13 @@ export default function Avatar({ label }: { label: string }) {
           s.glint = -1
           s.nextGlint = t + 4500 + Math.random() * 3000
         }
-      } else if (t > s.nextGlint && !reduce) s.glint = 0
+      } else if (t > s.nextGlint) s.glint = 0
 
-      if (!reduce) {
-        if (diving && s.wl > -2) s.wl = Math.max(-2, s.wl - 1)
-        if (!diving && s.wl < N + 1) s.wl = Math.min(N + 1, s.wl + 1)
-      }
+      if (diving && s.wl > -2) s.wl = Math.max(-2, s.wl - 1)
+      if (!diving && s.wl < N + 1) s.wl = Math.min(N + 1, s.wl + 1)
 
       // underwater, the breath cycle drives buoyancy (inhale lifts) and bubbles (exhale)
-      if (diving && s.wl < OY + s.bob + 12 && !reduce) {
+      if (diving && s.wl < OY + s.bob + 12) {
         const ph = ((t - s.diveStart) % BREATH_MS) / BREATH_MS
         s.bob = Math.round(-Math.sin(ph * Math.PI * 2) * 0.8)
         if (ph > 0.56 && Math.random() < 0.5) {
@@ -225,7 +225,7 @@ export default function Avatar({ label }: { label: string }) {
             big: false,
           })
         }
-      } else if (!reduce && t - s.lastBob > 700) {
+      } else if (t - s.lastBob > 700) {
         s.bob = s.bob > 0 ? 0 : 1
         s.lastBob = t
       }
@@ -252,6 +252,15 @@ export default function Avatar({ label }: { label: string }) {
         }
       }
       draw(t)
+    }
+
+    if (reduce) {
+      redrawRef.current = () => {
+        s.wl = diveRef.current ? -2 : N + 1
+        draw(0)
+      }
+      redrawRef.current()
+      return
     }
 
     let timer = 0

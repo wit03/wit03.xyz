@@ -1,4 +1,5 @@
 import type { Content } from '@/lib/content'
+import { MAX_DEPTH } from '@/lib/depth'
 
 export default function Footer({ site }: { site: Content['site'] }) {
   const host = new URL(site.url).host
@@ -36,7 +37,7 @@ export default function Footer({ site }: { site: Content['site'] }) {
           </svg>
         </a>
         <a href='#top' className='hover:text-ink'>
-          30 m · resurface ↑
+          {MAX_DEPTH} m · resurface ↑
         </a>
       </div>
     </footer>

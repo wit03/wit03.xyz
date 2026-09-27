@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 import { Geist, Geist_Mono, Silkscreen } from 'next/font/google'
 import { getContent } from '@/lib/content'
+import { PALETTE } from '@/lib/palette'
 import './globals.css'
 
 const geist = Geist({ variable: '--font-geist', subsets: ['latin'] })
@@ -26,8 +27,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f1f3f4' },
-    { media: '(prefers-color-scheme: dark)', color: '#0b0e12' },
+    { media: '(prefers-color-scheme: light)', color: PALETTE.light.bg },
+    { media: '(prefers-color-scheme: dark)', color: PALETTE.dark.bg },
   ],
 }
 

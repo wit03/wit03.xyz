@@ -1,11 +1,8 @@
 import type { ReactNode } from 'react'
 import Duration from '@/components/Duration'
-import type { Content, SectionId, TimelineEntry } from '@/lib/content'
+import type { Content, Section, SectionId, TimelineEntry } from '@/lib/content'
 import { formatMonth, formatRange, formatYears } from '@/lib/dates'
-
-type Section = Content['sections'][number]
-
-const external = { target: '_blank', rel: 'noopener noreferrer' } as const
+import { external } from '@/lib/links'
 
 function Shell({ section, children }: { section: Section; children: ReactNode }) {
   return (

@@ -1,16 +1,15 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import type { Section } from '@/lib/content'
+import { MAX_DEPTH } from '@/lib/depth'
 import { prefersReducedMotion, tokens } from '@/lib/tokens'
 
 // Scrolling is a dive. This draws the parallax ocean behind the page, the pinned gauge with a
 // tiny diver on the right, and the dive-computer readout. Depth is interpolated between the
 // sections' configured depths, so the readout matches each section's label as it arrives.
 
-const MAX_DEPTH = 30
 const ARRIVE = 0.35 // a section "arrives" when its top reaches 35% down the viewport
-
-type Section = { id: string; title: string; depth: number }
 
 const MINI_DIVER = ['..hhh..', '.hgggh.', '..srs..', 'ykkkkky', 'kakkkak', 'k.kkk.k', '..kkk..', '..k.k..', '..k.k..']
 const FINS = [
@@ -61,7 +60,7 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       OH = 0,
       GW = 0,
       GH = 0
-    let points: { y: number; depth: number; title: string }[] = []
+    let points: { id: string; y: number; depth: number; title: string }[] = []
     let depth = 0 // metres
     let lastTop = 0
     let kick = 0
@@ -91,7 +90,7 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
         if (!el) return []
         const y = Math.min(max, Math.max(prev, el.getBoundingClientRect().top + scrollY - innerHeight * ARRIVE))
         prev = y
-        return [{ y, depth: s.depth, title: s.title }]
+        return [{ id: s.id, y, depth: s.depth, title: s.title }]
       })
       update()
     }
@@ -153,7 +152,7 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       }
 
       // a school of fish passing around the Projects depth
-      const fishAt = points.find((p) => p.title.toLowerCase().startsWith('project'))?.y ?? maxScroll() * 0.6
+      const fishAt = points.find((p) => p.id === 'projects')?.y ?? maxScroll() * 0.6
       const fy = OH * 0.42 + (fishAt - top) * 0.7
       if (fy > -40 && fy < OH + 40) {
         const span = OW + 160

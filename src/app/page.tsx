@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <>
-      <DiveLayer sections={sections.map(({ id, title, depth }) => ({ id, title, depth }))} />
+      <DiveLayer sections={sections} />
       <div className='relative z-10 mx-auto box-content max-w-[660px] px-7 pt-7 pb-30 max-[900px]:pr-24 max-sm:pr-16 max-sm:pl-4'>
         <nav className='flex flex-wrap items-center justify-between gap-3'>
           <a href='#top' className='font-pixel text-[15px] tracking-[0.02em]'>

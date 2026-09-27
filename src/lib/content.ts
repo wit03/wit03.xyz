@@ -3,6 +3,7 @@ import path from 'node:path'
 import matter from 'gray-matter'
 import { marked } from 'marked'
 import { z } from 'zod'
+import { MAX_DEPTH } from '@/lib/depth'
 
 // Every file in content/ is parsed with gray-matter and checked against a schema here.
 // A bad field fails the build with the file name and the field that's wrong.
@@ -38,7 +39,7 @@ const sectionsSchema = z.object({
     z.object({
       id: z.enum(SECTION_IDS),
       title: z.string(),
-      depth: z.number().min(0).max(30),
+      depth: z.number().min(0).max(MAX_DEPTH),
     }),
   ),
 })
@@ -177,3 +178,4 @@ export function getContent() {
 }
 
 export type Content = ReturnType<typeof getContent>
+export type Section = Content['sections'][number]

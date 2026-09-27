@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import Avatar from '@/components/Avatar'
+import { linkProps } from '@/lib/links'
 import { prefersReducedMotion, tokens } from '@/lib/tokens'
 
 type Props = {
@@ -136,7 +137,7 @@ export default function Hero({ handle, name, tagline, status, links }: Props) {
             <a
               key={l.label}
               href={l.href}
-              {...(l.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              {...linkProps(l.href)}
               className='step-ease border border-line px-2.5 py-0.5 font-mono text-xs transition-colors duration-150 hover:border-ink hover:bg-ink hover:text-bg'
             >
               {l.label}
