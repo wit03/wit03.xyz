@@ -6,6 +6,7 @@ import { MAX_DEPTH } from '@/lib/depth'
 import { skyAt, type Sky } from '@/lib/sky'
 import { prefersReducedMotion, tokens } from '@/lib/tokens'
 import { createOcean } from '@/components/ocean/creatures'
+import { mixHex, type Point } from '@/components/ocean/pixels'
 import { drawSky } from '@/components/ocean/sky-scene'
 
 // Scrolling is a dive. This draws the surface sky and parallax ocean behind the page, the pinned
@@ -58,7 +59,7 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
     const ocean = createOcean()
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
     let sky: Sky = skyAt(new Date(), timeZone)
-    let pointer: { x: number; y: number } | null = null
+    let pointer: Point | null = null
     let skyHeight = 96 // waterline sits just above the hero; measured in measure()
     const parts = LAYERS.flatMap((L) =>
       Array.from({ length: L.n }, () => ({ L, x: Math.random(), y: Math.random() * 1000, ph: Math.random() * 6 })),
@@ -128,7 +129,19 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       const top = scrollY
       ox!.setTransform(dpr, 0, 0, dpr, 0, 0)
       ox!.clearRect(0, 0, OW, OH)
-      drawSky(sky, { ctx: ox!, width: OW, top: -top, height: skyHeight, t, tokens: T })
+      // The sky is fully there at the surface and gone by the first section's depth.
+      const firstDepth = sections[0]?.depth ?? 3
+      drawSky(sky, {
+        ctx: ox!,
+        width: OW,
+        top: -top,
+        height: skyHeight,
+        t,
+        tokens: T,
+        visibility: Math.max(0, 1 - depth / firstDepth),
+        // Mirrors --water in globals.css (bg mixed toward deep by up to 16%).
+        water: mixHex(T.bg, T.deep, d * 0.16),
+      })
 
       // light rays, fading out by ~12 m
       const rayA = Math.max(0, 1 - d * 2.4)

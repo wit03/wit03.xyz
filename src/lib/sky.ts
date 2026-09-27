@@ -1,5 +1,6 @@
 import { getMoonIllumination, getMoonPosition, getPosition, getTimes } from 'suncalc'
 import { locate } from '@/lib/locate'
+import { OCEAN } from '@/lib/palette'
 
 // What the surface sky looks like for a visitor right now. Pure: time and time zone in,
 // scene description out. The ocean layer draws it; nothing here touches the DOM.
@@ -43,7 +44,7 @@ export type Sky = {
   sun: SkyBody
   moon: SkyMoon
   /** Sky colours from the top of the band down to the horizon. */
-  gradient: string[]
+  gradient: readonly string[]
 }
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v))
@@ -60,14 +61,6 @@ function body(p: { altitude: number; azimuth: number }, lat: number): SkyBody {
     x: clamp01(along / 180),
     y: clamp01(p.altitude / 90),
   }
-}
-
-const GRADIENTS: Record<SkyPhase, string[]> = {
-  night: ['#070b1f', '#131d45', '#23336a'],
-  dawn: ['#2c3a78', '#8a6fa8', '#f2a88a'],
-  day: ['#5aaee8', '#8ccaf2', '#d3ecfa'],
-  golden: ['#4f8fd0', '#f0b877', '#f7d69a'],
-  dusk: ['#1f2459', '#7a4a86', '#ef7f5c'],
 }
 
 // Lunar cycle position (0 new, 0.25 first quarter, 0.5 full, 0.75 last quarter) to a name.
@@ -111,5 +104,5 @@ export function skyAt(date: Date, timeZone: string): Sky {
     litSide: litRight ? 'right' : 'left',
   }
 
-  return { phase, stars: phase === 'night', sun, moon, gradient: GRADIENTS[phase] }
+  return { phase, stars: phase === 'night', sun, moon, gradient: OCEAN.sky[phase] }
 }

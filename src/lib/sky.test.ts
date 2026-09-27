@@ -18,6 +18,19 @@ describe('skyAt', () => {
     // Bangkok (~13.7°N) in early October: the noon sun is roughly 75° up.
     expect(sky.sun.altitude).toBeGreaterThan(65)
   })
+
+  it('peaks around local noon', () => {
+    // Sample the day every 15 minutes; the highest sun should fall within ~30 minutes of noon
+    // (Bangkok's solar noon is a little before 12:00 in October).
+    let best = { minutes: 0, altitude: -90 }
+    for (let m = 6 * 60; m <= 18 * 60; m += 15) {
+      const hh = String(Math.floor(m / 60)).padStart(2, '0')
+      const mm = String(m % 60).padStart(2, '0')
+      const { altitude } = skyAt(bangkok(`2025-10-06T${hh}:${mm}:00`), 'Asia/Bangkok').sun
+      if (altitude > best.altitude) best = { minutes: m, altitude }
+    }
+    expect(Math.abs(best.minutes - 12 * 60)).toBeLessThanOrEqual(30)
+  })
   it('is golden hour or dusk around local sunset', () => {
     // Bangkok sunset in early October is about 18:05.
     expect(['golden', 'dusk']).toContain(skyAt(bangkok('2025-10-06T17:55:00'), 'Asia/Bangkok').phase)
