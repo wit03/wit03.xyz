@@ -3,10 +3,13 @@
 import { useEffect, useRef } from 'react'
 import type { Section } from '@/lib/content'
 import { MAX_DEPTH } from '@/lib/depth'
+import { skyAt, type Sky } from '@/lib/sky'
 import { prefersReducedMotion, tokens } from '@/lib/tokens'
+import { createOcean } from '@/components/ocean/creatures'
+import { drawSky } from '@/components/ocean/sky-scene'
 
-// Scrolling is a dive. This draws the parallax ocean behind the page, the pinned gauge with a
-// tiny diver on the right, and the dive-computer readout. Depth is interpolated between the
+// Scrolling is a dive. This draws the surface sky and parallax ocean behind the page, the pinned
+// gauge with a tiny diver on the right, and the dive-computer readout. Depth is interpolated between the
 // sections' configured depths, so the readout matches each section's label as it arrives.
 
 const ARRIVE = 0.35 // a section "arrives" when its top reaches 35% down the viewport
@@ -16,23 +19,8 @@ const FINS = [
   ['.ff.ff.', '.......'],
   ['..f.f..', '.ff.ff.'],
 ]
-const FISH: [number, number][] = [
-  [0, 0],
-  [0, 2],
-  [1, 1],
-  [2, 0],
-  [2, 1],
-  [2, 2],
-  [3, 1],
-]
-const SCHOOL: [number, number][] = [
-  [0, 0],
-  [14, -8],
-  [26, 6],
-  [10, 12],
-  [36, -2],
-  [22, 20],
-]
+const SKY_GAP = 10 // px between the waterline and the top of the hero
+const SKY_REFRESH_MS = 60_000
 const LAYERS = [
   { f: 0.15, s: 2, a: 0.16, n: 22 },
   { f: 0.35, s: 2, a: 0.26, n: 18 },
@@ -67,6 +55,11 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
     let lastKick = 0
     let lastExhale = 0
     let bubbles: { x: number; y: number; vy: number; a: number; ph: number }[] = []
+    const ocean = createOcean()
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    let sky: Sky = skyAt(new Date(), timeZone)
+    let pointer: { x: number; y: number } | null = null
+    let skyHeight = 96 // waterline sits just above the hero; measured in measure()
     const parts = LAYERS.flatMap((L) =>
       Array.from({ length: L.n }, () => ({ L, x: Math.random(), y: Math.random() * 1000, ph: Math.random() * 6 })),
     )
@@ -83,6 +76,8 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       GH = gc!.clientHeight
       gc!.width = GW * dpr
       gc!.height = GH * dpr
+      const hero = document.getElementById('top')
+      if (hero) skyHeight = Math.max(60, hero.getBoundingClientRect().top + scrollY - SKY_GAP)
       const max = maxScroll()
       let prev = 0
       points = sections.flatMap((s) => {
@@ -105,6 +100,16 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       return MAX_DEPTH
     }
 
+    function scrollForDepth(d: number) {
+      const pts = [{ y: 0, depth: 0 }, ...points, { y: maxScroll(), depth: MAX_DEPTH }]
+      for (let i = 1; i < pts.length; i++) {
+        const a = pts[i - 1]
+        const b = pts[i]
+        if (d <= b.depth) return b.depth > a.depth ? a.y + ((d - a.depth) / (b.depth - a.depth)) * (b.y - a.y) : b.y
+      }
+      return maxScroll()
+    }
+
     function update() {
       depth = Math.min(MAX_DEPTH, Math.max(0, depthAt(scrollY)))
       const d = depth / MAX_DEPTH
@@ -123,6 +128,7 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       const top = scrollY
       ox!.setTransform(dpr, 0, 0, dpr, 0, 0)
       ox!.clearRect(0, 0, OW, OH)
+      drawSky(sky, { ctx: ox!, width: OW, top: -top, height: skyHeight, t, tokens: T })
 
       // light rays, fading out by ~12 m
       const rayA = Math.max(0, 1 - d * 2.4)
@@ -151,21 +157,21 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
         ox!.fillRect(Math.round(x / p.L.s) * p.L.s, Math.round(y / p.L.s) * p.L.s, p.L.s, p.L.s)
       }
 
-      // a school of fish passing around the Projects depth
-      const fishAt = points.find((p) => p.id === 'projects')?.y ?? maxScroll() * 0.6
-      const fy = OH * 0.42 + (fishAt - top) * 0.7
-      if (fy > -40 && fy < OH + 40) {
-        const span = OW + 160
-        const fx0 = ((t * 0.035) % span) - 80
-        const wig = Math.floor(t / 220) % 2
-        ox!.globalAlpha = 0.32
-        for (const [dx, dy] of SCHOOL) {
-          const bx = Math.round((fx0 + dx) / 3) * 3
-          const by = Math.round((fy + dy + Math.sin(t / 600 + dx) * 2) / 3) * 3
-          for (const [x, y] of FISH) ox!.fillRect(bx + x * 3, by + (x === 0 && wig ? 1 : y) * 3, 3, 3)
-        }
-      }
       ox!.globalAlpha = 1
+
+      ocean.draw({
+        ctx: ox!,
+        width: OW,
+        height: OH,
+        t,
+        scrollY: top,
+        scrollForDepth,
+        sectionDepth: (id) => sections.find((s) => s.id === id)?.depth,
+        floorY: OH + (maxScroll() - top),
+        pointer,
+        tokens: T,
+        small: OW < 640,
+      })
     }
 
     function drawGauge(t: number) {
@@ -264,10 +270,23 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       raf = requestAnimationFrame(frame)
     }
 
+    const onPointer = (e: PointerEvent) => {
+      pointer = e.pointerType === 'mouse' ? { x: e.clientX, y: e.clientY } : null
+    }
+    const clearPointer = () => (pointer = null)
+    const skyTimer = window.setInterval(() => {
+      sky = skyAt(new Date(), timeZone)
+      if (reduce) draw(0)
+    }, SKY_REFRESH_MS)
+
     const ro = new ResizeObserver(measure)
     ro.observe(document.body)
     addEventListener('resize', measure)
     addEventListener('scroll', update, { passive: true })
+    if (!reduce) {
+      addEventListener('pointermove', onPointer, { passive: true })
+      document.documentElement.addEventListener('pointerleave', clearPointer)
+    }
     measure()
     if (!reduce) raf = requestAnimationFrame(frame)
     return () => {
@@ -275,6 +294,9 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       ro.disconnect()
       removeEventListener('resize', measure)
       removeEventListener('scroll', update)
+      removeEventListener('pointermove', onPointer)
+      document.documentElement.removeEventListener('pointerleave', clearPointer)
+      clearInterval(skyTimer)
     }
   }, [sections])
 
