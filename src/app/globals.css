@@ -79,7 +79,7 @@ h4 {
   .timeline {
     position: relative;
     display: grid;
-    gap: 28px;
+    gap: 44px;
     padding-left: 26px;
   }
   .timeline::before {
@@ -139,7 +139,7 @@ h4 {
     display: grid;
     grid-template-columns: 120px 1fr auto;
     gap: 14px;
-    padding: 12px 8px;
+    padding: 16px 8px;
     margin-inline: -8px;
     align-items: baseline;
     transition: background-color 0.18s steps(3);
