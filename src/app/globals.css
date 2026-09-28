@@ -187,8 +187,9 @@ h4 {
     display: grid;
     pointer-events: none;
   }
+  /* ink, not the page colour: the handle sits on the sky, which no flat colour matches */
   .dissolve > i {
-    background: var(--water);
+    background: var(--ink);
     opacity: 0;
   }
 }

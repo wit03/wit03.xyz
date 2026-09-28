@@ -49,7 +49,10 @@ export default function Home() {
           <Hero handle={site.handle} name={site.name} tagline={site.tagline} status={site.status} links={links} />
 
           {first && (
-            <a href={`#${first.id}`} className='label mx-auto flex flex-col items-center gap-1 text-muted hover:text-ink'>
+            <a
+              href={`#${first.id}`}
+              className='label mx-auto flex flex-col items-center gap-1 text-muted hover:text-ink'
+            >
               dive
               <span className='pulse' aria-hidden='true'>
                 ▾
