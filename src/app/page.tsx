@@ -3,7 +3,6 @@ import Footer from '@/components/Footer'
 import Hero from '@/components/Hero'
 import Reveal from '@/components/Reveal'
 import { renderSection } from '@/components/Sections'
-import ThemeToggle from '@/components/ThemeToggle'
 import { getContent } from '@/lib/content'
 import { currentYearMonth } from '@/lib/dates'
 
@@ -22,7 +21,7 @@ export default function Home() {
     <>
       <DiveLayer sections={sections} />
       <div className='relative z-10 mx-auto box-content max-w-[660px] px-7 pt-7 pb-30 max-[900px]:pr-24 max-sm:pr-10 max-sm:pl-4 max-sm:pt-5'>
-        {/* Phones: logo and theme toggle share the top row, section links sit beneath. */}
+        {/* Phones: logo on top, section links spread beneath. */}
         <nav className='flex items-center gap-x-4 gap-y-3 max-sm:flex-wrap'>
           <a href='#top' className='font-pixel text-[15px] tracking-[0.02em]'>
             {site.handle}
@@ -42,9 +41,6 @@ export default function Home() {
               </a>
             </li>
           </ul>
-          <div className='max-sm:order-2 max-sm:ml-auto'>
-            <ThemeToggle />
-          </div>
         </nav>
 
         <main>

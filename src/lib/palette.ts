@@ -2,10 +2,7 @@
 // browser theme colour, and the canvas-drawn sky and sea. Keep the page colours in sync with
 // the tokens at the top of globals.css.
 
-export const PALETTE = {
-  light: { bg: '#f1f3f4', ink: '#101418', muted: '#5b6570', accent: '#2f4fe0' },
-  dark: { bg: '#0b0e12' },
-} as const
+export const PALETTE = { bg: '#0b0e12', ink: '#e6eaee', muted: '#8c96a1', accent: '#8196ff' } as const
 
 export const OCEAN = {
   /** Sky gradients, top of the band down to the horizon. */
@@ -19,7 +16,7 @@ export const OCEAN = {
   sun: { core: '#fff3c4', dawn: '#ff9a62', day: '#ffd766', golden: '#ffb347', dusk: '#ff8a5c' },
   moon: { lit: '#f4f1e2', dark: 'rgba(244,241,226,.12)' },
   star: '#ffffff',
-  waterline: { light: '#ffffff', dark: '#9fc4ff' },
+  waterline: '#9fc4ff',
   eye: 'rgba(255,255,255,.7)',
   sand: '#cbbd98',
   coral: { branch: '#d4a0aa', fan: '#d6ae88', brain: '#aa9ac6', kelp: '#88b79b' },
