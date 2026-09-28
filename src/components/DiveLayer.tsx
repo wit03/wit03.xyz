@@ -117,7 +117,8 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       root.style.setProperty('--d', d.toFixed(3))
       let title = 'Surface'
       for (const p of points) if (scrollY >= p.y - 1) title = p.title
-      if (depthRef.current) depthRef.current.firstChild!.textContent = depth.toFixed(1)
+      if (depthRef.current)
+        depthRef.current.firstChild!.textContent = innerWidth < 640 ? String(Math.round(depth)) : depth.toFixed(1)
       if (tempRef.current) tempRef.current.textContent = `${(29.5 - d * 3).toFixed(1)}°C`
       if (secRef.current) secRef.current.textContent = title
       if (reduce) draw(0)
@@ -191,7 +192,9 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       const T = tokens()
       gx!.setTransform(dpr, 0, 0, dpr, 0, 0)
       gx!.clearRect(0, 0, GW, GH)
-      const trackX = GW - 16
+      // Phones get a slim gauge: the track hugs the edge and the diver rides on it.
+      const slim = GW < 50
+      const trackX = slim ? GW - 8 : GW - 16
       const top = 34
       const bot = GH - 12
       const h = bot - top
@@ -200,8 +203,9 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       gx!.fillStyle = T.muted
       gx!.font = '9px ui-monospace, monospace'
       gx!.textAlign = 'right'
-      gx!.fillText('0 m', GW - 4, 18)
-      for (const s of sections) gx!.fillRect(trackX - 5, Math.round(top + (s.depth / MAX_DEPTH) * h), 10, 1)
+      gx!.fillText(slim ? '0' : '0 m', GW - 4, 18)
+      const tick = slim ? 3 : 5
+      for (const s of sections) gx!.fillRect(trackX - tick, Math.round(top + (s.depth / MAX_DEPTH) * h), tick * 2, 1)
       const dy = top + (depth / MAX_DEPTH) * h
       gx!.fillStyle = T.accent
       gx!.fillRect(trackX - 1, top, 2, dy - top)
@@ -210,7 +214,7 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       // the diver
       const S = GW < 70 ? 2 : 3
       const dw = 7 * S
-      const x0 = Math.round(trackX - 10 - dw)
+      const x0 = Math.round(slim ? trackX - dw / 2 : trackX - 10 - dw)
       const y0 = Math.round(dy - 5 * S)
       // a black wetsuit vanishes on the night-dive background, so lift it in dark mode
       const col: Record<string, string> = {
@@ -319,17 +323,22 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       <canvas
         ref={gaugeRef}
         aria-hidden='true'
-        className='pointer-events-none fixed top-0 right-0 z-20 h-[calc(100dvh-92px)] w-20 max-sm:w-[58px]'
+        className='pointer-events-none fixed top-0 right-0 z-20 h-[calc(100dvh-92px)] w-20 max-sm:h-[calc(100dvh-48px)] max-sm:w-[34px]'
       />
       <div
         aria-hidden='true'
-        className='pointer-events-none fixed right-2.5 bottom-3 z-20 grid w-16 gap-px border border-line bg-surface px-1.5 pt-1.5 pb-1 font-mono text-[9.5px] text-muted tabular-nums max-sm:right-1.5 max-sm:w-[50px] max-sm:p-1'
+        className='pointer-events-none fixed right-2.5 bottom-3 z-20 grid w-16 gap-px border border-line bg-surface px-1.5 pt-1.5 pb-1 font-mono text-[9.5px] text-muted tabular-nums max-sm:right-1 max-sm:bottom-2 max-sm:w-[32px] max-sm:px-0.5 max-sm:py-1 max-sm:text-center'
       >
-        <span ref={depthRef} className='font-pixel text-[15px] leading-tight text-ink max-sm:text-xs'>
+        <span ref={depthRef} className='font-pixel text-[15px] leading-tight text-ink max-sm:text-[11px]'>
           0.0<small className='text-[9px] text-muted'>m</small>
         </span>
-        <span ref={tempRef}>29.5°C</span>
-        <span ref={secRef} className='truncate font-pixel text-[8.5px] tracking-[0.04em] text-accent uppercase'>
+        <span ref={tempRef} className='max-sm:hidden'>
+          29.5°C
+        </span>
+        <span
+          ref={secRef}
+          className='truncate font-pixel text-[8.5px] tracking-[0.04em] text-accent uppercase max-sm:hidden'
+        >
           Surface
         </span>
       </div>

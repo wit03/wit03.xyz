@@ -187,6 +187,8 @@ h4 {
   @media (max-width: 640px) {
     .row {
       grid-template-columns: 1fr auto;
+      gap: 2px 12px;
+      padding-block: 10px;
     }
     .row > :first-child {
       grid-column: 1 / -1;
