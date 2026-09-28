@@ -24,7 +24,7 @@ export default function Home() {
       <div className='relative z-10 mx-auto box-content max-w-[660px] px-7 pb-30 max-[900px]:pr-24 max-sm:pr-10 max-sm:pl-4'>
         {/* The surface: most of the first screen is sky, with the waterline along its bottom edge
             and a strip of sea showing beneath it. */}
-        <div id='top' className='flex min-h-[82svh] flex-col pt-7 pb-8 max-sm:pt-5'>
+        <div id='top' className='flex min-h-[82svh] flex-col pt-7 pb-14 max-sm:pt-5'>
           {/* Phones: logo on top, section links spread beneath. */}
           <nav className='flex items-center gap-x-4 gap-y-3 max-sm:flex-wrap'>
             <a href='#top' className='font-pixel text-[15px] tracking-[0.02em]'>

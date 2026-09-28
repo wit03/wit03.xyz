@@ -20,6 +20,15 @@ const HALO: [number, number, number][] = [
   [9, 13, 0.12],
 ]
 const GLITTER_ROWS = 14
+// Wave layers, back to front. amp: px either side of the rest line; lift: px the rest line
+// sits above the horizon; k: wavelengths (px/rad); s: speeds (rad/ms); haze: mix toward the
+// sky's horizon colour, so the far swell sits back.
+const WAVES = [
+  { amp: 5, lift: 24, k1: 150, k2: 57, s1: 1 / 1400, s2: 1 / 1000, haze: 0.42, crest: false },
+  { amp: 9, lift: 12, k1: 95, k2: 39, s1: 1 / 800, s2: 1 / 600, haze: 0.2, crest: false },
+  { amp: 14, lift: 0, k1: 60, k2: 24, s1: 1 / 480, s2: 1 / 340, haze: 0, crest: true },
+]
+const FOAM_DEPTH = 42 // px below the waterline that drifting foam reaches
 
 export type SkyView = {
   ctx: CanvasRenderingContext2D
@@ -104,7 +113,8 @@ function glitter(ctx: CanvasRenderingContext2D, x: number, horizon: number, colo
 
 export function drawSky(sky: Sky, v: SkyView) {
   const { ctx, width, top, height, t, water, shallows } = v
-  const horizon = top + height
+  // Whole pixels, so the stepped bands meet without hairline seams on high-DPI screens.
+  const horizon = Math.round(top + height)
   if (horizon + shallows < 0) return
   const strength = STRENGTH[sky.phase]
   const sea = OCEAN.sea[sky.phase]
@@ -115,13 +125,6 @@ export function drawSky(sky: Sky, v: SkyView) {
     ctx.fillStyle = alongStops(sky.gradient, y / height)
     ctx.fillRect(0, top + y, width, STEP)
   }
-  // Shallows: sunlit sea at the waterline, darkening quickly and then slowly into the page's
-  // water. The last band is the page colour itself, so the drawing ends without an edge.
-  ctx.globalAlpha = 1
-  for (let y = 0; y < shallows; y += STEP) {
-    ctx.fillStyle = mixHex(sea, water, Math.pow(y / shallows, 0.6))
-    ctx.fillRect(0, horizon + y, width, STEP)
-  }
 
   if (sky.stars) {
     ctx.fillStyle = OCEAN.star
@@ -131,16 +134,22 @@ export function drawSky(sky: Sky, v: SkyView) {
     }
   }
 
+  // On phones the hero text spans the whole width, so the sun and moon keep to the open strip
+  // between it and the sea (still higher the higher they are) instead of sitting on the name.
+  const rise = width < 640 ? height * 0.18 : height - 40
   const place = (b: { x: number; y: number }) => ({
     x: width * (0.08 + b.x * 0.84),
-    y: horizon - 18 - b.y * (height - 40),
+    y: horizon - 30 - b.y * rise,
   })
+
+  const night = sky.phase === 'night'
+  let sunX: number | null = null
+  let moonX: number | null = null
 
   if (sky.sun.up && sky.phase !== 'night') {
     const p = place(sky.sun)
-    const rim = OCEAN.sun[sky.phase]
-    sun(ctx, p.x, p.y, rim, t)
-    glitter(ctx, p.x, horizon, OCEAN.sun.core, 0.75, t)
+    sun(ctx, p.x, p.y, OCEAN.sun[sky.phase], t)
+    sunX = p.x
   }
 
   if (sky.moon.up) {
@@ -149,20 +158,88 @@ export function drawSky(sky: Sky, v: SkyView) {
     // Terminator: a cell is lit when it lies past the ellipse k·√(1−v²) on the lit side.
     const k = 1 - 2 * fraction
     const dir = litSide === 'right' ? 1 : -1
-    const night = sky.phase === 'night'
     ctx.globalAlpha = night ? 0.95 : 0.55
     disc(ctx, p.x, p.y, 4, (u, w) =>
       u * dir > k * Math.sqrt(Math.max(0, 1 - w * w)) ? OCEAN.moon.lit : OCEAN.moon.dark,
     )
-    // Moonlight on the water, only at night and brighter the fuller the moon.
-    if (night) glitter(ctx, p.x, horizon, OCEAN.moon.lit, 0.2 + 0.35 * fraction, t)
+    if (night) moonX = p.x
   }
 
-  ctx.globalAlpha = 0.6
-  ctx.fillStyle = OCEAN.waterline
-  for (let x = 0; x < width; x += CELL) {
-    const y = horizon + Math.round(Math.sin(t / 500 + x / 40) * 1.5)
-    ctx.fillRect(x, snap(y, CELL), CELL, CELL - 1)
+  // The sea: waves stand up in front of the sky (a low sun sets behind them), then the
+  // shallows darken quickly and then slowly into the page's water. The last band is the page
+  // colour itself, so the drawing ends without an edge.
+  waves(ctx, width, horizon, sea, sky.gradient[sky.gradient.length - 1], night ? 0.5 : 0.95, t)
+  ctx.globalAlpha = 1
+  for (let y = CELL; y < shallows; y += STEP) {
+    ctx.fillStyle = mixHex(sea, water, Math.pow(y / shallows, 0.6))
+    ctx.fillRect(0, horizon + y, width, STEP)
   }
+  if (sunX !== null) glitter(ctx, sunX, horizon, OCEAN.sun.core, 0.75, t)
+  // Moonlight on the water, only at night and brighter the fuller the moon.
+  if (moonX !== null) glitter(ctx, moonX, horizon, OCEAN.moon.lit, 0.2 + 0.35 * sky.moon.fraction, t)
+  foam(ctx, width, horizon, night ? 0.35 : 0.6, t)
   ctx.restore()
+}
+
+/** Height (px) of a wave layer at x: two sines against each other, so no two crests match. */
+function swell(x: number, t: number, w: (typeof WAVES)[number]) {
+  return w.amp * (0.6 * Math.sin(x / w.k1 + t * w.s1) + 0.4 * Math.sin(x / w.k2 - t * w.s2))
+}
+
+/**
+ * Two layers of swell above the horizon: a lighter, slower one behind and a choppier one in
+ * front with a lit crest line and whitecaps where it peaks.
+ */
+function waves(
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  horizon: number,
+  sea: string,
+  skyLow: string,
+  foamAlpha: number,
+  t: number,
+) {
+  for (const w of WAVES) {
+    const body = mixHex(sea, skyLow, w.haze)
+    // Light catches the upper face of each wave; the trough behind it stays in shadow.
+    const face = mixHex(body, OCEAN.waterline, 0.32)
+    for (let x = 0; x < width; x += CELL) {
+      const h = swell(x, t, w)
+      const y = snap(horizon - w.lift - w.amp - h, CELL)
+      ctx.globalAlpha = 1
+      ctx.fillStyle = body
+      ctx.fillRect(x, y, CELL, horizon + CELL - y)
+      ctx.fillStyle = face
+      ctx.fillRect(x, y, CELL, CELL * 2)
+      if (!w.crest) continue
+      // lit edge along the crest
+      ctx.fillStyle = OCEAN.waterline
+      ctx.globalAlpha = 0.7
+      ctx.fillRect(x, y, CELL, CELL - 1)
+      // whitecaps on the peaks, flickering as the crest breaks
+      if (h > w.amp * 0.5 && hash(Math.floor(x / CELL) + Math.floor(t / 160) * 31) > 0.3) {
+        ctx.fillStyle = OCEAN.foam
+        ctx.globalAlpha = foamAlpha
+        ctx.fillRect(x, y - CELL, CELL, CELL)
+        if (h > w.amp * 0.7) ctx.fillRect(x, y, CELL, CELL * 2)
+        // spray thrown off the highest peaks
+        if (h > w.amp * 0.85 && hash(Math.floor(x / CELL) * 7 + Math.floor(t / 120)) > 0.6) {
+          ctx.fillRect(x, y - CELL * 3, CELL - 1, CELL - 1)
+        }
+      }
+    }
+  }
+}
+
+/** Flecks of foam drifting just under the surface, fading with depth. */
+function foam(ctx: CanvasRenderingContext2D, width: number, horizon: number, alpha: number, t: number) {
+  ctx.fillStyle = OCEAN.foam
+  const n = Math.round(width / 24)
+  for (let i = 0; i < n; i++) {
+    const depth = hash(i + 500) * FOAM_DEPTH
+    const x = (((hash(i + 600) * width + t * 0.012 * (0.5 + hash(i + 700))) % width) + width) % width
+    const y = horizon + CELL * 2 + depth + Math.sin(t / 900 + i) * 2
+    ctx.globalAlpha = alpha * (1 - depth / FOAM_DEPTH) * (0.6 + 0.4 * Math.sin(t / 400 + i * 2.3))
+    ctx.fillRect(snap(x, CELL), snap(y, CELL), CELL * (1 + (i % 3 === 0 ? 1 : 0)), CELL - 1)
+  }
 }
