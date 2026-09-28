@@ -12,7 +12,7 @@ const C = PALETTE
 
 export default function OpengraphImage() {
   const { site } = getContent()
-  const px = restingPixels(C.accent)
+  const px = restingPixels()
   return new ImageResponse(
     <div
       style={{

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { COLORS, EYES, GEAR, GLASSES, GLINT, SPRITE } from '@/lib/sprite'
+import { COLORS, EYES, GEAR, GLASSES, GLINT, JACKET, SPRITE } from '@/lib/sprite'
 import { prefersReducedMotion, tokens } from '@/lib/tokens'
 
 // A 24×24 scene with the 16px-wide sprite in the middle. Idle: blink, breathe, look at the
@@ -82,11 +82,11 @@ export default function Avatar({ label }: { label: string }) {
         }
       }
 
-      // body; the shirt becomes a wetsuit with accent BCD straps
+      // body; the jacket becomes a wetsuit with accent BCD straps
       SPRITE.forEach((row, y) => {
         for (let x = 0; x < row.length; x++) {
           const ch = row[x]
-          if (ch !== '.') sp(x, y, ch === 't' ? (gear ? GEAR.suit : accent) : COLORS[ch])
+          if (ch !== '.') sp(x, y, gear && JACKET.has(ch) ? GEAR.suit : COLORS[ch])
         }
       })
       if (gear) {

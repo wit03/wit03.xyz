@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import type { Section } from '@/lib/content'
 import { MAX_DEPTH } from '@/lib/depth'
+import { OCEAN } from '@/lib/palette'
 import { skyAt, type Sky } from '@/lib/sky'
 import { prefersReducedMotion, tokens } from '@/lib/tokens'
 import { createOcean } from '@/components/ocean/creatures'
@@ -20,7 +21,6 @@ const FINS = [
   ['.ff.ff.', '.......'],
   ['..f.f..', '.ff.ff.'],
 ]
-const SKY_GAP = 10 // px between the waterline and the top of the hero
 const SKY_REFRESH_MS = 60_000
 const LAYERS = [
   { f: 0.15, s: 2, a: 0.16, n: 22 },
@@ -58,9 +58,9 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
     let bubbles: { x: number; y: number; vy: number; a: number; ph: number }[] = []
     const ocean = createOcean()
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-    let sky: Sky = skyAt(new Date(), timeZone)
+    let sky: Sky
     let pointer: Point | null = null
-    let skyHeight = 96 // waterline sits just above the hero; measured in measure()
+    let skyHeight = 800 // waterline sits along the bottom of the first screen; measured in measure()
     const parts = LAYERS.flatMap((L) =>
       Array.from({ length: L.n }, () => ({ L, x: Math.random(), y: Math.random() * 1000, ph: Math.random() * 6 })),
     )
@@ -77,8 +77,8 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       GH = gc!.clientHeight
       gc!.width = GW * dpr
       gc!.height = GH * dpr
-      const hero = document.getElementById('top')
-      if (hero) skyHeight = Math.max(60, hero.getBoundingClientRect().top + scrollY - SKY_GAP)
+      const surface = document.getElementById('top')
+      if (surface) skyHeight = Math.max(60, surface.getBoundingClientRect().bottom + scrollY)
       const max = maxScroll()
       let prev = 0
       points = sections.flatMap((s) => {
@@ -130,31 +130,38 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       const top = scrollY
       ox!.setTransform(dpr, 0, 0, dpr, 0, 0)
       ox!.clearRect(0, 0, OW, OH)
-      // The sky is fully there at the surface and gone by the first section's depth.
-      const firstDepth = sections[0]?.depth ?? 3
+      // The sky fills the first screen and scrolls away with it.
       drawSky(sky, {
         ctx: ox!,
         width: OW,
         top: -top,
         height: skyHeight,
         t,
-        visibility: Math.max(0, 1 - depth / firstDepth),
         // Mirrors --water in globals.css (bg mixed toward deep by up to 16%).
         water: mixHex(T.bg, T.deep, d * 0.16),
+        shallows: OH,
       })
 
-      // light rays, fading out by ~12 m
+      // Everything else lives underwater, below the waterline.
+      const surfaceY = Math.max(0, skyHeight - top)
+      if (surfaceY >= OH) return
+      ox!.save()
+      ox!.beginPath()
+      ox!.rect(0, surfaceY, OW, OH - surfaceY)
+      ox!.clip()
+
+      // light rays from the waterline, fading out by ~12 m
       const rayA = Math.max(0, 1 - d * 2.4)
       if (rayA > 0) {
-        ox!.fillStyle = T.surface
+        ox!.fillStyle = OCEAN.waterline
         for (let i = 0; i < 5; i++) {
           const x0 = (i * OW) / 4.2 + Math.sin(t / 3000 + i) * 30
-          ox!.globalAlpha = rayA * (0.16 + 0.08 * Math.sin(t / 1400 + i * 1.7))
+          ox!.globalAlpha = rayA * (0.06 + 0.03 * Math.sin(t / 1400 + i * 1.7))
           ox!.beginPath()
-          ox!.moveTo(x0, 0)
-          ox!.lineTo(x0 + 46, 0)
-          ox!.lineTo(x0 + 46 - OH * 0.35 + 160, OH)
-          ox!.lineTo(x0 - OH * 0.35 + 160, OH)
+          ox!.moveTo(x0, surfaceY)
+          ox!.lineTo(x0 + 46, surfaceY)
+          ox!.lineTo(x0 + 46 - OH * 0.35 + 160, surfaceY + OH)
+          ox!.lineTo(x0 - OH * 0.35 + 160, surfaceY + OH)
           ox!.closePath()
           ox!.fill()
         }
@@ -185,6 +192,7 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
         tokens: T,
         small: OW < 640,
       })
+      ox!.restore()
     }
 
     function drawGauge(t: number) {
@@ -290,8 +298,14 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       pointer = e.pointerType === 'mouse' ? { x: e.clientX, y: e.clientY } : null
     }
     const clearPointer = () => (pointer = null)
-    const skyTimer = window.setInterval(() => {
+    // The hero reads this to pick dark or light text for the sky behind it.
+    const setSky = () => {
       sky = skyAt(new Date(), timeZone)
+      root.dataset.sky = sky.phase
+    }
+    setSky()
+    const skyTimer = window.setInterval(() => {
+      setSky()
       if (reduce) draw(0)
     }, SKY_REFRESH_MS)
 

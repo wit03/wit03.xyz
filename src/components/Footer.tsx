@@ -6,7 +6,7 @@ export default function Footer({ site }: { site: Content['site'] }) {
   return (
     <footer
       id='contact'
-      className='mt-18 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-line pt-4 font-mono text-xs text-muted'
+      className='mt-36 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-line pt-4 font-mono text-xs text-muted'
     >
       <div className='flex flex-wrap items-center gap-x-4 gap-y-2'>
         {site.email && (

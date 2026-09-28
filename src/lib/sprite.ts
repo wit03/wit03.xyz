@@ -1,44 +1,53 @@
 // The pixel avatar, shared by the live canvas, the favicon and the OG image.
-// One character per pixel: h hair, s skin, d skin shade, w eye white, m mouth, t shirt.
+// One character per pixel: h hair, s skin, d skin shade, w eye white, m mouth (a closed
+// smile), t jacket, q jacket quilting, z zip, b bag strap, r strap buckle.
 
 export const SPRITE = [
-  '................',
-  '.....hhhhhh.....',
-  '...hhhhhhhhhh...',
-  '..hhhhhhhhhhhh..',
-  '..hhhhhhhhhhhh..',
-  '..hhsshhhsshhh..',
-  '..hssssssssssh..',
+  '.......h..h.....',
+  '....hhhhhhhh....',
+  '...hhhhhhhhhhh..',
+  '..hhhhhhhhhhhhh.',
+  '..hhhhhhhhhhhhh.',
+  '..hhhshhhhhshh..',
+  '..hsssshsssssh..',
   '.dsswwsssswwssd.',
   '.dsswwsssswwssd.',
   '..ssssssssssss..',
   '..sssssddsssss..',
   '..ssssssssssss..',
-  '...sssmmmmsss...',
-  '....ssssssss....',
-  '......ssss......',
-  '...tttttttttt...',
-  '..tttttttttttt..',
-  '..tttttttttttt..',
-  '..tttttttttttt..',
-  '..tttttttttttt..',
-  '..tttttttttttt..',
-  '..tttttttttttt..',
+  '...ssmssssmss...',
+  '....ssmmmmss....',
+  '...tttssssttt...',
+  '.tttttttztttbtt.',
+  '.tttttttzttbttt.',
+  '.qqqqqqqzqbqqqq.',
+  '.ttttttrrtttttt.',
+  '.ttttttbztttttt.',
+  '.qqqqqbqzqqqqqq.',
+  '.ttttbttztttttt.',
 ]
 
 export const SPRITE_W = 16
 export const SPRITE_H = SPRITE.length
 
 export const COLORS: Record<string, string> = {
-  h: '#1a1c22',
-  s: '#E9B790',
-  d: '#C98E66',
+  h: '#16181d',
+  s: '#E6AF86',
+  d: '#C4885F',
   w: '#FFFFFF',
-  m: '#A05A45',
+  m: '#A0513F',
+  t: '#5b4436',
+  q: '#45332a',
+  z: '#8a7566',
+  b: '#23262c',
+  r: '#e0412f',
 }
 
+/** Jacket pixels, which turn into the wetsuit on a dive. */
+export const JACKET = new Set(['t', 'q', 'z', 'b', 'r'])
+
 export const GEAR = {
-  frame: '#2a2d35',
+  frame: '#4a2f24',
   glint: '#EAF3FF',
   suit: '#1d2128',
   reg: '#2b2f36',
@@ -97,12 +106,12 @@ export const GLINT: [number, number][][] = [
 ]
 
 /** Static pixels for the resting avatar (glasses on, looking ahead). */
-export function restingPixels(shirt: string) {
+export function restingPixels() {
   const px: { x: number; y: number; c: string }[] = []
   SPRITE.forEach((row, y) => {
     for (let x = 0; x < row.length; x++) {
       const ch = row[x]
-      if (ch !== '.') px.push({ x, y, c: ch === 't' ? shirt : COLORS[ch] })
+      if (ch !== '.') px.push({ x, y, c: COLORS[ch] })
     }
   })
   // Pupils on the inner column of each eye, so the resting avatar looks at the viewer.
