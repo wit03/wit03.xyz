@@ -13,6 +13,14 @@ export const OCEAN = {
     golden: ['#4f8fd0', '#f0b877', '#f7d69a'],
     dusk: ['#1f2459', '#7a4a86', '#ef7f5c'],
   },
+  /** Sunlit water just under the waterline; it darkens into the page's deep water below. */
+  sea: {
+    night: '#12204a',
+    dawn: '#2a4274',
+    day: '#2378b4',
+    golden: '#2c6a94',
+    dusk: '#2a3163',
+  },
   sun: { core: '#fff3c4', dawn: '#ff9a62', day: '#ffd766', golden: '#ffb347', dusk: '#ff8a5c' },
   moon: { lit: '#f4f1e2', dark: 'rgba(244,241,226,.12)' },
   star: '#ffffff',

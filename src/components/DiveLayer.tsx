@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import type { Section } from '@/lib/content'
 import { MAX_DEPTH } from '@/lib/depth'
+import { OCEAN } from '@/lib/palette'
 import { skyAt, type Sky } from '@/lib/sky'
 import { prefersReducedMotion, tokens } from '@/lib/tokens'
 import { createOcean } from '@/components/ocean/creatures'
@@ -57,7 +58,7 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
     let bubbles: { x: number; y: number; vy: number; a: number; ph: number }[] = []
     const ocean = createOcean()
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-    let sky: Sky = skyAt(new Date(), timeZone)
+    let sky: Sky
     let pointer: Point | null = null
     let skyHeight = 800 // waterline sits along the bottom of the first screen; measured in measure()
     const parts = LAYERS.flatMap((L) =>
@@ -138,6 +139,7 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
         t,
         // Mirrors --water in globals.css (bg mixed toward deep by up to 16%).
         water: mixHex(T.bg, T.deep, d * 0.16),
+        shallows: OH,
       })
 
       // Everything else lives underwater, below the waterline.
@@ -151,10 +153,10 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       // light rays from the waterline, fading out by ~12 m
       const rayA = Math.max(0, 1 - d * 2.4)
       if (rayA > 0) {
-        ox!.fillStyle = T.surface
+        ox!.fillStyle = OCEAN.waterline
         for (let i = 0; i < 5; i++) {
           const x0 = (i * OW) / 4.2 + Math.sin(t / 3000 + i) * 30
-          ox!.globalAlpha = rayA * (0.16 + 0.08 * Math.sin(t / 1400 + i * 1.7))
+          ox!.globalAlpha = rayA * (0.06 + 0.03 * Math.sin(t / 1400 + i * 1.7))
           ox!.beginPath()
           ox!.moveTo(x0, surfaceY)
           ox!.lineTo(x0 + 46, surfaceY)
@@ -296,8 +298,14 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       pointer = e.pointerType === 'mouse' ? { x: e.clientX, y: e.clientY } : null
     }
     const clearPointer = () => (pointer = null)
-    const skyTimer = window.setInterval(() => {
+    // The hero reads this to pick dark or light text for the sky behind it.
+    const setSky = () => {
       sky = skyAt(new Date(), timeZone)
+      root.dataset.sky = sky.phase
+    }
+    setSky()
+    const skyTimer = window.setInterval(() => {
+      setSky()
       if (reduce) draw(0)
     }, SKY_REFRESH_MS)
 
