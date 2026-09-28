@@ -3,14 +3,17 @@ import type { Sky } from '@/lib/sky'
 import { alongStops, hash, mixHex, snap } from './pixels'
 
 // Draws the surface: a stepped sky gradient above a wavy waterline, stars at night, and the
-// sun and moon where the visitor would see them. The band sits at the top of the page, fades
-// as the dive deepens, and blends into the water below. Positions and phases come from the
-// pure sky module.
+// sun and moon where the visitor would see them. The band fills the page's first screen,
+// scrolls away as the dive begins, and blends into the water below. Positions and phases
+// come from the pure sky module.
 
 const CELL = 3 // pixel size for the sun, moon and stars
 const STEP = 6 // height of each gradient band, for the pixel look
 const BLEND = 48 // px below the waterline where the sky colour blends into the water
-const STARS = Array.from({ length: 36 }, (_, i) => ({ x: hash(i + 101), y: hash(i + 201), tw: i * 0.7 }))
+const STARS = Array.from({ length: 72 }, (_, i) => ({ x: hash(i + 101), y: hash(i + 201), tw: i * 0.7 }))
+// How strongly each sky paints over the dark page. The hero sits on the sky, so bright skies
+// are toned right down to keep its text readable.
+const STRENGTH: Record<Sky['phase'], number> = { night: 0.85, dawn: 0.55, dusk: 0.55, golden: 0.35, day: 0.3 }
 
 export type SkyView = {
   ctx: CanvasRenderingContext2D
@@ -19,8 +22,6 @@ export type SkyView = {
   top: number
   height: number
   t: number
-  /** 1 at the surface, falling to 0 by the first section's depth. */
-  visibility: number
   /** The page's current water colour (#rrggbb), which the horizon blends into. */
   water: string
 }
@@ -43,12 +44,10 @@ function disc(
 }
 
 export function drawSky(sky: Sky, v: SkyView) {
-  const { ctx, width, top, height, t, visibility, water } = v
-  if (visibility <= 0 || top + height + BLEND < 0) return
+  const { ctx, width, top, height, t, water } = v
+  if (top + height + BLEND < 0) return
   const horizon = top + height
-  // Bright daytime skies are toned down so the nav stays readable over them.
-  const bright = sky.phase === 'day' || sky.phase === 'golden'
-  const strength = (bright ? 0.5 : 0.85) * visibility
+  const strength = STRENGTH[sky.phase]
   const horizonColor = sky.gradient[sky.gradient.length - 1]
 
   ctx.save()
@@ -81,7 +80,7 @@ export function drawSky(sky: Sky, v: SkyView) {
   if (sky.sun.up && sky.phase !== 'night') {
     const p = place(sky.sun)
     const rim = OCEAN.sun[sky.phase]
-    ctx.globalAlpha = 0.95 * visibility
+    ctx.globalAlpha = 0.95
     disc(ctx, p.x, p.y, 4, (u, w) => (u * u + w * w > 0.7 ? rim : OCEAN.sun.core))
   }
 
@@ -91,13 +90,13 @@ export function drawSky(sky: Sky, v: SkyView) {
     // Terminator: a cell is lit when it lies past the ellipse k·√(1−v²) on the lit side.
     const k = 1 - 2 * fraction
     const dir = litSide === 'right' ? 1 : -1
-    ctx.globalAlpha = (sky.phase === 'night' ? 0.95 : 0.55) * visibility
+    ctx.globalAlpha = sky.phase === 'night' ? 0.95 : 0.55
     disc(ctx, p.x, p.y, 4, (u, w) =>
       u * dir > k * Math.sqrt(Math.max(0, 1 - w * w)) ? OCEAN.moon.lit : OCEAN.moon.dark,
     )
   }
 
-  ctx.globalAlpha = 0.6 * visibility
+  ctx.globalAlpha = 0.6
   ctx.fillStyle = OCEAN.waterline
   for (let x = 0; x < width; x += CELL) {
     const y = horizon + Math.round(Math.sin(t / 500 + x / 40) * 1.5)
