@@ -8,7 +8,7 @@ export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 const P = 18 // screen pixels per sprite pixel
-const C = PALETTE.light
+const C = PALETTE
 
 export default function OpengraphImage() {
   const { site } = getContent()

@@ -26,25 +26,13 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: PALETTE.light.bg },
-    { media: '(prefers-color-scheme: dark)', color: PALETTE.dark.bg },
-  ],
+  themeColor: PALETTE.bg,
+  colorScheme: 'dark',
 }
-
-// Applies a stored theme choice before first paint so there's no flash.
-const themeScript = `try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}`
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html
-      lang='en'
-      suppressHydrationWarning
-      className={`${geist.variable} ${geistMono.variable} ${silkscreen.variable}`}
-    >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
+    <html lang='en' className={`${geist.variable} ${geistMono.variable} ${silkscreen.variable}`}>
       <body>{children}</body>
     </html>
   )

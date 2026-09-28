@@ -1,35 +1,8 @@
 @import 'tailwindcss';
 
 /* ---------- theme tokens ---------- */
-/* Light is the base. Dark applies from the OS setting unless the toggle picked light,
-   and again under [data-theme='dark'] so the toggle wins both ways. */
+/* The site is dark-only: a night dive. */
 :root {
-  --bg: #f1f3f4;
-  --surface: #ffffff;
-  --ink: #101418;
-  --muted: #5b6570;
-  --line: #d6dce1;
-  --accent: #2f4fe0;
-  --deep: #10306e;
-  --ok: #1a9e5f;
-  /* --d (0–1) is the scroll depth, set by the dive gauge. The page gets bluer as it grows. */
-  --d: 0;
-  --water: color-mix(in oklab, var(--bg), var(--deep) calc(var(--d) * 16%));
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    color-scheme: dark;
-    --bg: #0b0e12;
-    --surface: #12161b;
-    --ink: #e6eaee;
-    --muted: #8c96a1;
-    --line: #232b33;
-    --accent: #8196ff;
-    --deep: #0b2f7a;
-    --ok: #1fb36b;
-  }
-}
-:root[data-theme='dark'] {
   color-scheme: dark;
   --bg: #0b0e12;
   --surface: #12161b;
@@ -39,6 +12,9 @@
   --accent: #8196ff;
   --deep: #0b2f7a;
   --ok: #1fb36b;
+  /* --d (0–1) is the scroll depth, set by the dive gauge. The page gets bluer as it grows. */
+  --d: 0;
+  --water: color-mix(in oklab, var(--bg), var(--deep) calc(var(--d) * 16%));
 }
 
 @theme inline {

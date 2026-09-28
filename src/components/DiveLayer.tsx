@@ -138,7 +138,6 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
         top: -top,
         height: skyHeight,
         t,
-        tokens: T,
         visibility: Math.max(0, 1 - depth / firstDepth),
         // Mirrors --water in globals.css (bg mixed toward deep by up to 16%).
         water: mixHex(T.bg, T.deep, d * 0.16),
@@ -216,13 +215,13 @@ export default function DiveLayer({ sections }: { sections: Section[] }) {
       const dw = 7 * S
       const x0 = Math.round(slim ? trackX - dw / 2 : trackX - 10 - dw)
       const y0 = Math.round(dy - 5 * S)
-      // a black wetsuit vanishes on the night-dive background, so lift it in dark mode
+      // hair and wetsuit are lifted from black so they show on the dark water
       const col: Record<string, string> = {
-        h: T.dark ? '#3a3f4a' : '#1a1c22',
+        h: '#3a3f4a',
         g: '#8fd0f5',
         s: '#E9B790',
         r: '#2b2f36',
-        k: T.dark ? '#4a5463' : '#1d2128',
+        k: '#4a5463',
         a: T.accent,
         y: '#E8B23A',
         f: T.accent,

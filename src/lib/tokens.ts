@@ -1,5 +1,4 @@
-// Canvas code can't use CSS variables directly, so read the theme tokens once
-// and refresh them whenever the theme changes (OS setting or the toggle).
+// Canvas code can't use CSS variables directly, so read the colour tokens once.
 
 export type Tokens = {
   accent: string
@@ -9,11 +8,9 @@ export type Tokens = {
   surface: string
   bg: string
   deep: string
-  dark: boolean
 }
 
 let cache: Tokens | null = null
-let watching = false
 
 function read(): Tokens {
   const s = getComputedStyle(document.documentElement)
@@ -26,20 +23,10 @@ function read(): Tokens {
     surface: v('--surface'),
     bg: v('--bg'),
     deep: v('--deep'),
-    dark: s.colorScheme.includes('dark'),
   }
 }
 
 export function tokens(): Tokens {
-  if (!watching) {
-    watching = true
-    const refresh = () => (cache = read())
-    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', refresh)
-    new MutationObserver(refresh).observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-theme'],
-    })
-  }
   return (cache ??= read())
 }
 

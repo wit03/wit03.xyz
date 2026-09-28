@@ -8,7 +8,7 @@ export const size = { width: 32, height: 32 }
 export const contentType = 'image/png'
 
 export default function Icon() {
-  const px = restingPixels(PALETTE.light.accent).filter((p) => p.y >= 1 && p.y <= 16)
+  const px = restingPixels(PALETTE.accent).filter((p) => p.y >= 1 && p.y <= 16)
   return new ImageResponse(
     <div style={{ display: 'flex', position: 'relative', width: 32, height: 32 }}>
       {px.map((p, i) => (

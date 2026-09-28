@@ -1,6 +1,5 @@
 import { OCEAN } from '@/lib/palette'
 import type { Sky } from '@/lib/sky'
-import type { Tokens } from '@/lib/tokens'
 import { alongStops, hash, mixHex, snap } from './pixels'
 
 // Draws the surface: a stepped sky gradient above a wavy waterline, stars at night, and the
@@ -20,7 +19,6 @@ export type SkyView = {
   top: number
   height: number
   t: number
-  tokens: Tokens
   /** 1 at the surface, falling to 0 by the first section's depth. */
   visibility: number
   /** The page's current water colour (#rrggbb), which the horizon blends into. */
@@ -45,11 +43,12 @@ function disc(
 }
 
 export function drawSky(sky: Sky, v: SkyView) {
-  const { ctx, width, top, height, t, tokens, visibility, water } = v
+  const { ctx, width, top, height, t, visibility, water } = v
   if (visibility <= 0 || top + height + BLEND < 0) return
   const horizon = top + height
-  // The theme sets contrast: a gentle tint on the light page, a fuller sky on the dark one.
-  const strength = (tokens.dark ? 0.85 : 0.45) * visibility
+  // Bright daytime skies are toned down so the nav stays readable over them.
+  const bright = sky.phase === 'day' || sky.phase === 'golden'
+  const strength = (bright ? 0.5 : 0.85) * visibility
   const horizonColor = sky.gradient[sky.gradient.length - 1]
 
   ctx.save()
@@ -99,7 +98,7 @@ export function drawSky(sky: Sky, v: SkyView) {
   }
 
   ctx.globalAlpha = 0.6 * visibility
-  ctx.fillStyle = tokens.dark ? OCEAN.waterline.dark : OCEAN.waterline.light
+  ctx.fillStyle = OCEAN.waterline
   for (let x = 0; x < width; x += CELL) {
     const y = horizon + Math.round(Math.sin(t / 500 + x / 40) * 1.5)
     ctx.fillRect(x, snap(y, CELL), CELL, CELL - 1)
