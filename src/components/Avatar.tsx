@@ -61,8 +61,20 @@ export default function Avatar({ label }: { label: string }) {
     }
     const lerp = (a: number, b: number, k: number) => Math.round(a + (b - a) * k)
 
+    // The accent as seen from the hero, which swaps to a darker one under a bright sky so the
+    // shirt doesn't melt into it. Re-read about once a second, not every frame.
+    let accent = tokens().accent
+    let accentAt = -Infinity
+    // Uses the real clock: reduced-motion frames are all drawn at t = 0.
+    function readAccent() {
+      const now = performance.now()
+      if (now - accentAt < 1000) return
+      accentAt = now
+      accent = getComputedStyle(cv!).getPropertyValue('--accent').trim() || tokens().accent
+    }
+
     function draw(t: number) {
-      const accent = tokens().accent
+      readAccent()
       const { wl } = s
       const gear = diveRef.current || wl < N + 1
       const by = OY + s.bob

@@ -34,11 +34,11 @@
 /* The hero sits on the live sky. Under a bright day or golden-hour sky it switches to dark
    ink; data-sky is set by the dive layer from the visitor's local sky. */
 :root:is([data-sky='day'], [data-sky='golden']) #top {
-  --ink: #0d1b2a;
-  --muted: #2c4459;
-  --line: rgba(13, 27, 42, 0.28);
-  --bg: #eef6fc;
-  --accent: #2f3fbf;
+  --ink: #121838;
+  --muted: #333e70;
+  --line: rgba(18, 24, 56, 0.3);
+  --bg: #eef0ff;
+  --accent: #2c38ad;
   color: var(--ink);
 }
 
