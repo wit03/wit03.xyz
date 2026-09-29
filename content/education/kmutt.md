@@ -5,7 +5,7 @@ schoolUrl: https://cpe.kmutt.ac.th/en/index
 type: International Program
 start: 2022-07
 end: 2026-06
-meta: GPAX 3.50 · 2nd-class honours
+meta: GPAX 3.50/4.00 · 2nd-class honours
 ---
 
 - King Mongkut's University of Technology Thonburi.
