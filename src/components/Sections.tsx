@@ -5,8 +5,13 @@ import { formatMonth, formatRange, formatYears } from '@/lib/dates'
 import { external } from '@/lib/links'
 
 function Shell({ section, children }: { section: Section; children: ReactNode }) {
+  // The surface above is 82svh, so the first section clears the rest of the first screen
+  // (18svh) plus a gap: only the sea shows under the hero, never half a section.
   return (
-    <section id={section.id} className='mt-36 grid scroll-mt-10 gap-6 first:mt-24 max-sm:mt-24 max-sm:first:mt-16'>
+    <section
+      id={section.id}
+      className='mt-36 grid scroll-mt-10 gap-6 first:mt-[calc(18svh+5rem)] max-sm:mt-24 max-sm:first:mt-[calc(18svh+4rem)]'
+    >
       <div className='flex items-baseline justify-between border-b border-line pb-2'>
         <h2 className='label' data-decode>
           {section.title}
