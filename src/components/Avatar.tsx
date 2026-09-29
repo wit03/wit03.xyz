@@ -303,9 +303,9 @@ export default function Avatar({ label }: { label: string }) {
             toggle()
           }
         }}
-        className='block size-44 cursor-pointer [image-rendering:pixelated] max-sm:size-28'
+        className='block size-52 cursor-pointer [image-rendering:pixelated] max-sm:size-32'
       />
-      <span className='font-pixel text-[9px] tracking-[0.06em] text-muted'>
+      <span className='font-pixel text-[11px] tracking-[0.06em] text-muted'>
         {diving ? 'click to surface' : 'click to dive'}
       </span>
     </div>

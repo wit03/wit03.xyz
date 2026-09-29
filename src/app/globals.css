@@ -51,7 +51,7 @@ body {
   background: var(--water);
   color: var(--ink);
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1.6;
 }
 h1,
@@ -73,7 +73,7 @@ h4 {
 @layer components {
   .label {
     font-family: var(--font-pixel);
-    font-size: 12px;
+    font-size: 14px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
@@ -126,7 +126,7 @@ h4 {
     margin: 0;
     padding: 0;
     color: var(--muted);
-    font-size: 14px;
+    font-size: 16px;
   }
   .prose-list li {
     position: relative;
@@ -149,7 +149,7 @@ h4 {
   /* list rows (projects, talks, awards) */
   .row {
     display: grid;
-    grid-template-columns: 120px 1fr auto;
+    grid-template-columns: 150px 1fr auto;
     gap: 14px;
     padding: 16px 8px;
     margin-inline: -8px;
@@ -161,7 +161,7 @@ h4 {
   }
   .row-arrow {
     font-family: var(--font-pixel);
-    font-size: 12px;
+    font-size: 14px;
     color: var(--muted);
     transform: translateX(-4px);
     transition:

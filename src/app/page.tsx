@@ -21,17 +21,17 @@ export default function Home() {
   return (
     <>
       <DiveLayer sections={sections} />
-      <div className='relative z-10 mx-auto box-content max-w-[660px] px-7 pb-30 max-[900px]:pr-24 max-sm:pr-10 max-sm:pl-4'>
+      <div className='relative z-10 mx-auto box-content max-w-[760px] px-7 pb-30 max-[900px]:pr-24 max-sm:pr-10 max-sm:pl-4'>
         {/* The surface: most of the first screen is sky, with the waterline along its bottom edge
             and a strip of sea showing beneath it. */}
         <div id='top' className='flex min-h-[82svh] flex-col pt-7 pb-14 max-sm:pt-5'>
           {/* Phones: logo on top, section links spread beneath. */}
           <nav className='flex items-center gap-x-4 gap-y-3 max-sm:flex-wrap'>
-            <a href='#top' className='font-pixel text-[15px] tracking-[0.02em]'>
+            <a href='#top' className='font-pixel text-[20px] tracking-[0.02em]'>
               {site.handle}
               <span className='text-accent'>.xyz</span>
             </a>
-            <ul className='ml-auto flex flex-wrap gap-4 font-mono text-xs max-sm:order-3 max-sm:ml-0 max-sm:w-full max-sm:justify-between max-sm:gap-2'>
+            <ul className='ml-auto flex flex-wrap gap-6 font-mono text-[15px] max-sm:order-3 max-sm:text-sm max-sm:ml-0 max-sm:w-full max-sm:justify-between max-sm:gap-2'>
               {nav.map((s) => (
                 <li key={s.id}>
                   <a href={`#${s.id}`} className='text-muted hover:text-ink'>
