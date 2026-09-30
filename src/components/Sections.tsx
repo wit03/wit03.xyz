@@ -16,7 +16,7 @@ function Shell({ section, children }: { section: Section; children: ReactNode })
         <h2 className='label' data-decode>
           {section.title}
         </h2>
-        <span className='font-mono text-[11px] text-muted'>{section.depth} m</span>
+        <span className='font-mono text-[13px] text-muted'>{section.depth} m</span>
       </div>
       {children}
     </section>
@@ -33,9 +33,9 @@ function Timeline({ entries, builtAt, years }: { entries: TimelineEntry[]; built
             <i className='timeline-node' data-current={current || undefined} aria-hidden='true' />
             <div className='grid grid-cols-[1fr_auto] items-start gap-x-4 gap-y-1 max-sm:grid-cols-1'>
               <div>
-                <h3 className='text-[17px] leading-snug font-semibold tracking-[-0.015em]'>{e.title}</h3>
-                <p className='flex flex-wrap items-center gap-x-2 gap-y-1.5 text-sm'>
-                  <span className='font-mono text-xs text-muted'>at</span>
+                <h3 className='text-[21px] leading-snug font-semibold tracking-[-0.015em]'>{e.title}</h3>
+                <p className='flex flex-wrap items-center gap-x-2 gap-y-1.5 text-base'>
+                  <span className='font-mono text-sm text-muted'>at</span>
                   {e.orgUrl ? (
                     <a
                       href={e.orgUrl}
@@ -51,9 +51,9 @@ function Timeline({ entries, builtAt, years }: { entries: TimelineEntry[]; built
                   {e.type && <Tag>{e.type}</Tag>}
                 </p>
               </div>
-              <div className='grid text-right font-mono text-xs whitespace-nowrap tabular-nums max-sm:flex max-sm:flex-wrap max-sm:gap-2 max-sm:text-left'>
+              <div className='grid text-right font-mono text-sm whitespace-nowrap tabular-nums max-sm:flex max-sm:flex-wrap max-sm:gap-2 max-sm:text-left'>
                 <span>{years ? formatYears(e.start, e.end) : formatRange(e.start, e.end)}</span>
-                <small className='text-[11px] text-muted'>
+                <small className='text-[13px] text-muted'>
                   {e.meta ?? <Duration start={e.start} end={e.end} builtAt={builtAt} />}
                 </small>
               </div>
@@ -69,7 +69,7 @@ function Timeline({ entries, builtAt, years }: { entries: TimelineEntry[]; built
 function Tag({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
     <span
-      className={`border border-line px-1.5 font-mono text-[10.5px] leading-[18px] tracking-[0.04em] text-muted uppercase ${className}`}
+      className={`border border-line px-1.5 font-mono text-[12px] leading-[20px] tracking-[0.04em] text-muted uppercase ${className}`}
     >
       {children}
     </span>
@@ -93,14 +93,14 @@ function Row({ href, children, arrow = '→' }: { href?: string; children: React
 }
 
 function When({ children }: { children: ReactNode }) {
-  return <span className='font-mono text-xs text-muted tabular-nums'>{children}</span>
+  return <span className='font-mono text-sm text-muted tabular-nums'>{children}</span>
 }
 
 function What({ title, sub, children }: { title: string; sub: string; children?: ReactNode }) {
   return (
     <span className='grid gap-0.5'>
       <b className='font-semibold'>{title}</b>
-      <span className='text-sm text-muted'>{sub}</span>
+      <span className='text-base text-muted'>{sub}</span>
       {children}
     </span>
   )
@@ -113,7 +113,7 @@ export function renderSection(section: Section, c: Content, builtAt: string) {
         {c.now.map((item) => (
           <li
             key={item}
-            className='grid grid-cols-[18px_1fr] before:text-xs before:leading-6 before:text-accent before:content-["▸"]'
+            className='grid grid-cols-[18px_1fr] before:text-sm before:leading-7 before:text-accent before:content-["▸"]'
           >
             {item}
           </li>
@@ -131,7 +131,7 @@ export function renderSection(section: Section, c: Content, builtAt: string) {
               {p.tags.length > 0 && (
                 <span className='mt-1 flex flex-wrap gap-1.5'>
                   {p.tags.map((t) => (
-                    <em key={t} className='border border-line px-1.5 font-mono text-[11px] text-muted not-italic'>
+                    <em key={t} className='border border-line px-1.5 font-mono text-[12px] text-muted not-italic'>
                       {t}
                     </em>
                   ))}
@@ -166,8 +166,8 @@ export function renderSection(section: Section, c: Content, builtAt: string) {
       <div className='rv grid grid-cols-3 gap-px border border-line bg-line max-sm:grid-cols-1'>
         {c.offscreen.map((o) => (
           <div key={o.title} className='grid gap-1 bg-water p-3.5'>
-            <b className='font-pixel text-[11px] font-normal tracking-[0.06em] uppercase'>{o.title}</b>
-            <span className='text-[13px] text-muted'>{o.text}</span>
+            <b className='font-pixel text-[13px] font-normal tracking-[0.06em] uppercase'>{o.title}</b>
+            <span className='text-[15px] text-muted'>{o.text}</span>
           </div>
         ))}
       </div>

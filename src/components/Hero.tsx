@@ -99,7 +99,7 @@ export default function Hero({ handle, name, tagline, status, links }: Props) {
   return (
     <section
       ref={heroRef}
-      className='relative my-auto grid grid-cols-[auto_1fr] items-center gap-7 py-12 will-change-transform max-sm:grid-cols-1 max-sm:gap-3'
+      className='relative my-auto grid grid-cols-[auto_1fr] items-center gap-10 py-12 will-change-transform max-sm:grid-cols-1 max-sm:gap-3'
     >
       <canvas
         ref={trailRef}
@@ -109,7 +109,7 @@ export default function Hero({ handle, name, tagline, status, links }: Props) {
       <Avatar label={`Pixel-art avatar of ${handle} with round glasses`} />
       <div className='relative grid gap-3'>
         <h1 className='grid gap-1'>
-          <span className='relative inline-block justify-self-start text-[clamp(48px,9vw,76px)] leading-none font-semibold tracking-[-0.045em]'>
+          <span className='relative inline-block justify-self-start text-[clamp(56px,9vw,104px)] leading-none font-semibold tracking-[-0.045em]'>
             {handle}
             <span
               ref={dissolveRef}
@@ -122,11 +122,11 @@ export default function Hero({ handle, name, tagline, status, links }: Props) {
               ))}
             </span>
           </span>
-          <span className='text-lg font-medium tracking-[-0.01em] text-muted'>{name}</span>
+          <span className='text-2xl font-medium tracking-[-0.01em] text-muted max-sm:text-xl'>{name}</span>
         </h1>
-        <p className='max-w-[44ch] text-muted'>{tagline}</p>
+        <p className='max-w-[44ch] text-lg text-muted'>{tagline}</p>
         {status && (
-          <span className='inline-flex items-center gap-2 font-mono text-xs'>
+          <span className='inline-flex items-center gap-2 font-mono text-sm'>
             <i className='pulse block size-2 bg-ok' />
             {status}
           </span>
@@ -137,7 +137,7 @@ export default function Hero({ handle, name, tagline, status, links }: Props) {
               key={l.label}
               href={l.href}
               {...linkProps(l.href)}
-              className='step-ease border border-line px-2.5 py-0.5 font-mono text-xs transition-colors duration-150 hover:border-ink hover:bg-ink hover:text-bg'
+              className='step-ease border border-line px-3 py-1 font-mono text-sm transition-colors duration-150 hover:border-ink hover:bg-ink hover:text-bg'
             >
               {l.label}
             </a>
