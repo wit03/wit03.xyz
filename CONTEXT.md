@@ -28,6 +28,10 @@ _Avoid_: Portfolio, projects index
 A dated step in a Project's story, written as a dated heading inside the Project's note. The unit a subscriber is notified about.
 _Avoid_: Update, post, log, changelog
 
+**Cover**:
+The one image that represents a Project on its card and when shared; a pixel placeholder stands in when there is none.
+_Avoid_: Thumbnail, hero image
+
 **Status**:
 Where a Project stands: building, paused, shipped or archived. Archived Projects stay reachable but leave the carousel.
 _Avoid_: State, phase
