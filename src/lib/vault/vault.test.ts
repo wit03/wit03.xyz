@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
-import { readVault } from '@/lib/vault'
+import { projectFeed, projectsFeed, readVault } from '@/lib/vault'
 
 // Every test builds a small Vault on disk and reads it through the public interface only.
 
@@ -264,5 +264,71 @@ describe('Obsidian syntax', () => {
     )!
     expect(p.entries[0].html).toContain('<a href="/project/pelter-api">Pelter</a>')
     expect(p.entries[0].html).toContain('class="tag-chip"')
+  })
+})
+
+describe('feeds', () => {
+  const site = { url: 'https://wit03.xyz', handle: 'wit03' }
+  const feedVault = () =>
+    readVault(
+      vault({
+        'Projects/Homeops.md': note(
+          base,
+          'Intro is never a feed item.\n\n## 2026-10-03 Backups survived\nRestored in **41 minutes**. See [[MegaNuts]].\n\n## 2026-09-21\nUntitled.\n\n## 2026-09-21 (2) Same day\nAgain.',
+        ),
+        'Projects/MegaNuts.md': note({ ...base, name: 'MegaNuts' }, '## 2026-09-30 Nuts bounce\nBoing.'),
+      }),
+    )
+  const items = (xml: string) => [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map((m) => m[1])
+  const field = (item: string, tag: string) => item.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`))?.[1]
+
+  it('is an RSS 2.0 channel describing every Project', () => {
+    const xml = projectsFeed(feedVault(), site)
+    expect(xml.startsWith('<?xml version="1.0" encoding="UTF-8"?>')).toBe(true)
+    expect(xml).toContain('<rss version="2.0"')
+    expect(xml).toContain(
+      '<atom:link href="https://wit03.xyz/projects/rss.xml" rel="self" type="application/rss+xml"/>',
+    )
+  })
+
+  it('carries every Journey entry across Projects, newest first, never the intro', () => {
+    const titles = items(projectsFeed(feedVault(), site)).map((i) => field(i, 'title'))
+    expect(titles).toEqual([
+      'Homeops: Backups survived',
+      'MegaNuts: Nuts bounce',
+      'Homeops: Same day',
+      'Homeops: Journey entry · 21 Sep 2026',
+    ])
+    expect(projectsFeed(feedVault(), site)).not.toContain('Intro is never a feed item')
+  })
+
+  it("gives a Project feed only that Project's entries", () => {
+    const v = feedVault()
+    const xml = projectFeed(
+      v.projects.find((p) => p.slug === 'meganuts')!,
+      site,
+    )
+    expect(items(xml).map((i) => field(i, 'title'))).toEqual(['Nuts bounce'])
+    expect(xml).toContain('<atom:link href="https://wit03.xyz/project/meganuts/rss.xml"')
+  })
+
+  it('uses the permanent entry id as the guid and links to the entry anchor', () => {
+    const first = items(projectsFeed(feedVault(), site))[0]
+    expect(first).toContain('<guid isPermaLink="false">homeops/2026-10-03</guid>')
+    expect(field(first, 'link')).toBe('https://wit03.xyz/project/homeops#e-2026-10-03')
+    expect(field(first, 'pubDate')).toBe('Sat, 03 Oct 2026 00:00:00 GMT')
+  })
+
+  it('carries the full entry HTML with absolute links', () => {
+    const desc = field(items(projectsFeed(feedVault(), site))[0], 'description')!
+    expect(desc).toContain('<![CDATA[')
+    expect(desc).toContain('<strong>41 minutes</strong>')
+    expect(desc).toContain('href="https://wit03.xyz/project/meganuts"')
+  })
+
+  it('escapes text so titles with markup stay valid XML', () => {
+    const v = readVault(vault({ 'Projects/A.md': note({ ...base, name: 'A & B' }, '## 2026-01-01 <Tags> & stuff\nx') }))
+    const xml = projectsFeed(v, site)
+    expect(xml).toContain('<title>A &amp; B: &lt;Tags&gt; &amp; stuff</title>')
   })
 })

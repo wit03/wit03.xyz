@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Ago from '@/components/projects/Ago'
 import ArticleShell from '@/components/projects/ArticleShell'
 import StatusPill from '@/components/projects/StatusPill'
+import Subscribe from '@/components/projects/Subscribe'
 import { formatDay, formatMonth, today } from '@/lib/dates'
 import { external } from '@/lib/links'
 import { getProject, getVault } from '@/lib/vault/source'
@@ -24,6 +25,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${project.name} · wit03`,
     description: project.summary,
     openGraph: { title: project.name, description: project.summary, url: `/project/${project.slug}` },
+    alternates: {
+      types: {
+        'application/rss+xml': [
+          { url: `/project/${project.slug}/rss.xml`, title: `wit03 · ${project.name}` },
+          { url: '/projects/rss.xml', title: 'wit03 · Projects' },
+        ],
+      },
+    },
   }
 }
 
@@ -64,6 +73,8 @@ export default async function ProjectPage({ params }: Props) {
             </ul>
           )}
         </header>
+
+        <Subscribe slug={project.slug} />
 
         {project.intro && <div className='note-prose' dangerouslySetInnerHTML={{ __html: project.intro }} />}
 

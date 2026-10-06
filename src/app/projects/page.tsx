@@ -4,6 +4,7 @@ import Ago from '@/components/projects/Ago'
 import ArticleShell from '@/components/projects/ArticleShell'
 import Cover from '@/components/projects/Cover'
 import StatusPill from '@/components/projects/StatusPill'
+import Subscribe from '@/components/projects/Subscribe'
 import { today } from '@/lib/dates'
 import { getVault } from '@/lib/vault/source'
 
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
   title: 'Projects · wit03',
   description: 'Side projects, written up as they happen.',
   openGraph: { title: 'Projects', description: 'Side projects, written up as they happen.', url: '/projects' },
+  alternates: { types: { 'application/rss+xml': [{ url: '/projects/rss.xml', title: 'wit03 · Projects' }] } },
 }
 
 export default function ProjectsPage() {
@@ -27,6 +29,7 @@ export default function ProjectsPage() {
           Side projects, written up as they happen. Each one is a running journal: what it is, then every step along the
           way.
         </p>
+        <Subscribe />
       </header>
 
       {projects.length === 0 ? (

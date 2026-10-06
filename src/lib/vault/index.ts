@@ -179,3 +179,5 @@ export function readVault(root: string): Vault {
   projects.sort((a, b) => (b.lastUpdate ?? '').localeCompare(a.lastUpdate ?? '') || a.name.localeCompare(b.name))
   return { projects, warnings }
 }
+
+export { type FeedSite, projectFeed, projectsFeed } from './feed'
