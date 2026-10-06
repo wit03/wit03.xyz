@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# the Vault, cloned at build time by scripts/fetch-vault.mjs
+/.vault
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

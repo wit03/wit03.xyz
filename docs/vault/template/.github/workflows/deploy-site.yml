@@ -1,0 +1,26 @@
+# Rebuilds wit03.xyz whenever the Vault changes, so a push from Obsidian goes live in a minute or two.
+# Needs one repository secret: VERCEL_DEPLOY_HOOK (Vercel → Project → Settings → Git → Deploy Hooks).
+name: Deploy wit03.xyz
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '.obsidian/**'
+      - '.trash/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger a Vercel deploy
+        env:
+          HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::error::Add the VERCEL_DEPLOY_HOOK secret to this repository."
+            exit 1
+          fi
+          curl --fail --silent --show-error -X POST "$HOOK" > /dev/null
+          echo "Deploy triggered."
