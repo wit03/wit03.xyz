@@ -31,3 +31,11 @@ export const OCEAN = {
   sand: '#cbbd98',
   coral: { branch: '#d4a0aa', fan: '#d6ae88', brain: '#aa9ac6', kelp: '#88b79b' },
 } as const
+
+/** Status colours for places CSS can't reach (the OG image, SVG placeholders). Match globals.css. */
+export const STATUS_COLOR = {
+  building: PALETTE.accent,
+  paused: '#e3a948',
+  shipped: '#1fb36b',
+  archived: PALETTE.muted,
+} as const

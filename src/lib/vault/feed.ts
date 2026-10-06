@@ -1,6 +1,6 @@
 import { formatDay } from '@/lib/dates'
 import type { JourneyEntry, Project, Vault } from './index'
-import { escapeHtml } from './markdown'
+import { escapeHtml } from './html'
 
 // RSS 2.0 for the Projects feed (every Journey entry) and each Project feed. Items carry the full
 // entry, use the permanent entry id as their guid (so editing a title never re-notifies anyone),

@@ -1,4 +1,5 @@
 import { Marked, type TokenizerAndRendererExtension } from 'marked'
+import { escapeHtml, FENCE, isImagePath } from './html'
 
 // Renders the Markdown of a Published note to HTML, understanding the Obsidian-only syntax:
 // - [[wikilinks]] become links only when they point at another Published note; anything else
@@ -24,13 +25,8 @@ export type RenderContext = {
   image: (ref: ImageRef) => string
 }
 
-const FENCE = /^\s*(```|~~~)/
 const BLOCK_REF = /\s\^[A-Za-z0-9-]+\s*$/
 const CALLOUT = /^>\s*\[!([A-Za-z-]+)\][+-]?\s*(.*)$/
-
-export function escapeHtml(s: string) {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-}
 
 /** Line-level rewrites that must happen outside code fences: block references and callouts. */
 function preprocess(source: string): string {
@@ -101,7 +97,7 @@ function extensions(ctx: RenderContext): TokenizerAndRendererExtension[] {
         if (token.embed) {
           const ref = parseEmbed(token.inner)
           // Embedded notes (transclusions) aren't published; only images are.
-          return /\.(png|jpe?g|webp|gif|avif)$/i.test(ref.target) ? ctx.image(ref) : ''
+          return isImagePath(ref.target) ? ctx.image(ref) : ''
         }
         const href = ctx.linkFor(token.noteName)
         const text = escapeHtml(token.text)

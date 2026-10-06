@@ -2,7 +2,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
 import { z } from 'zod'
-import { type VaultImage, imgTag, indexImages, isImagePath, loadImage } from './images'
+import { FENCE, isImagePath } from './html'
+import { type VaultImage, imgTag, indexImages, loadImage } from './images'
 import { type ImageRef, type RenderContext, renderMarkdown } from './markdown'
 
 // The Vault reader: a folder of Obsidian notes goes in, Projects come out. Only Published notes
@@ -63,7 +64,7 @@ const frontmatter = z.object({
   summary: z.string().min(1),
   status: z.enum(STATUSES),
   started: yearMonth.optional(),
-  links: z.array(z.object({ label: z.string(), href: z.string() })).default([]),
+  links: z.array(z.object({ label: z.string(), href: z.url({ protocol: /^https?$/ }) })).default([]),
   tags: z.array(z.string()).default([]),
   slug: z
     .string()
@@ -73,7 +74,9 @@ const frontmatter = z.object({
 })
 
 const ENTRY_HEADING = /^##\s+(\d{4}-\d{2}-\d{2})(?:\s+\((\d+)\))?(?:\s+(.*?))?\s*$/
-const FENCE = /^\s*(```|~~~)/
+// Anything starting "## 2026-" is meant as a Journey entry; if it doesn't parse, say so rather than
+// silently rendering it as an ordinary heading.
+const ENTRY_LIKE = /^##\s+\d{4}-\d/
 
 export function slugify(name: string) {
   return name
@@ -111,6 +114,9 @@ function splitJourney(body: string, where: string) {
   for (const line of body.split('\n')) {
     if (FENCE.test(line)) fenced = !fenced
     const m = !fenced && line.match(ENTRY_HEADING)
+    if (!fenced && !m && ENTRY_LIKE.test(line)) {
+      throw new Error(`${where}: "${line.trim()}" looks like a Journey entry; write it as "## YYYY-MM-DD Title"`)
+    }
     if (m) {
       const [, date, suffix, title] = m
       if (!isRealDate(date)) throw new Error(`${where}: "${date}" in a Journey entry heading is not a real date`)
@@ -143,9 +149,16 @@ export function readVault(root: string): Vault {
   }
 
   // Wikilinks resolve by note name, as in Obsidian, and only ever to Published notes.
-  const bySlug = new Map(published.map((n) => [n.noteName.toLowerCase(), n.slug]))
+  const slugByNoteName = new Map<string, string>()
+  for (const n of published) {
+    const key = n.noteName.toLowerCase()
+    if (slugByNoteName.has(key)) {
+      throw new Error(`Two Published notes are named "${n.noteName}"; rename one so [[${n.noteName}]] is unambiguous`)
+    }
+    slugByNoteName.set(key, n.slug)
+  }
   const linkFor = (name: string) => {
-    const slug = bySlug.get(name.toLowerCase())
+    const slug = slugByNoteName.get(name.toLowerCase())
     return slug ? `/project/${slug}` : undefined
   }
 

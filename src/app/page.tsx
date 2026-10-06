@@ -12,14 +12,18 @@ export default function Home() {
   const { site } = content
   const builtAt = currentYearMonth()
   // The carousel previews live work; archived Projects stay on /projects. No Projects, no stop.
-  const projects = getVault().projects.filter((p) => p.status !== 'archived')
+  const published = getVault().projects
+  const projects = published.filter((p) => p.status !== 'archived')
   const sections = content.sections.filter((s) => s.id !== 'projects' || projects.length > 0)
   const links = [
     ...site.links,
     ...(site.email ? [{ label: 'Email', href: `mailto:${site.email}` }] : []),
     ...(site.resume ? [{ label: 'Résumé', href: site.resume }] : []),
   ]
-  const nav = sections.filter((s) => ['work', 'education', 'projects'].includes(s.id))
+  // The nav links to /projects whenever anything is published, even if only archived Projects remain.
+  const nav = content.sections.filter(
+    (s) => ['work', 'education'].includes(s.id) || (s.id === 'projects' && published.length > 0),
+  )
   const first = sections[0]
 
   return (
@@ -66,7 +70,7 @@ export default function Home() {
           )}
         </div>
 
-        <main>{sections.map((s) => renderSection(s, content, { builtAt, today: today(), projects }))}</main>
+        <main>{sections.map((s) => renderSection(s, content, { builtAt, buildDay: today(), projects }))}</main>
 
         <Footer site={site} />
       </div>

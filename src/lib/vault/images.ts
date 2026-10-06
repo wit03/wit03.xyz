@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { imageSize } from 'image-size'
 import sharp from 'sharp'
-import { escapeHtml } from './markdown'
+import { escapeHtml, isImagePath } from './html'
 
 // Images live in the Vault's attachments (docs/adr/0001). The reader resolves the ones Published
 // notes reference; the /media route turns each into a few WebP widths with all metadata stripped.
@@ -20,11 +20,8 @@ export type VaultImage = {
   widths: number[]
 }
 
-const EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.avif'])
 const VARIANTS = [480, 960, 1600]
 const MAX = VARIANTS[VARIANTS.length - 1]
-
-export const isImagePath = (p: string) => EXTENSIONS.has(path.extname(p).toLowerCase())
 
 export const mediaFile = (key: string, width: number) => `${key}-${width}.webp`
 export const mediaUrl = (key: string, width: number) => `/media/${mediaFile(key, width)}`

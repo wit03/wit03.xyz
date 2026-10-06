@@ -28,20 +28,35 @@ if (!token) {
   process.exit(0)
 }
 
-const url = `https://x-access-token:${token}@github.com/${repo}.git`
+// The token travels as an HTTP header set through git's environment config, never on the command
+// line (where `ps` would show it) and never in the clone's remote URL or .git/config.
+const auth = Buffer.from(`x-access-token:${token}`).toString('base64')
 try {
-  execFileSync('git', ['clone', '--quiet', '--depth', '1', ...(ref ? ['--branch', ref] : []), url, DEST], {
-    stdio: ['ignore', 'ignore', 'pipe'],
-  })
+  execFileSync(
+    'git',
+    ['clone', '--quiet', '--depth', '1', ...(ref ? ['--branch', ref] : []), `https://github.com/${repo}.git`, DEST],
+    {
+      stdio: ['ignore', 'ignore', 'pipe'],
+      env: {
+        ...process.env,
+        GIT_TERMINAL_PROMPT: '0',
+        GIT_CONFIG_COUNT: '1',
+        GIT_CONFIG_KEY_0: 'http.https://github.com/.extraheader',
+        GIT_CONFIG_VALUE_0: `AUTHORIZATION: basic ${auth}`,
+      },
+    },
+  )
 } catch (err) {
-  // Never print the token: git's error can echo the URL.
-  const message = String(err.stderr ?? err.message).replaceAll(token, '***')
+  fs.rmSync(DEST, { recursive: true, force: true }) // don't leave a half-clone behind
+  const message = String(err.stderr ?? err.message)
+    .replaceAll(token, '***')
+    .replaceAll(auth, '***')
   console.error(`[vault] Could not clone ${repo}: ${message.trim()}`)
   console.error('[vault] Failing the build so the live site keeps its last good version.')
   process.exit(1)
 }
 
-// Drop git metadata (its config holds the token) and mark the folder as ours.
+// Git metadata isn't needed to build; drop it and mark the folder as ours.
 fs.rmSync(path.join(DEST, '.git'), { recursive: true, force: true })
 fs.writeFileSync(MARKER, `Cloned from ${repo}${ref ? `@${ref}` : ''} at build time. Safe to delete.\n`)
 const notes = fs.existsSync(path.join(DEST, 'Projects')) ? fs.readdirSync(path.join(DEST, 'Projects')).length : 0

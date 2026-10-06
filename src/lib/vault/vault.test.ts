@@ -69,6 +69,24 @@ describe('validation', () => {
     expect(() => readVault(dir)).toThrow(/Projects\/X\.md[\s\S]*2026-13-40/)
   })
 
+  it('fails on a heading that looks like a Journey entry but is not YYYY-MM-DD', () => {
+    for (const bad of ['## 2026-1-5 Short date', '## 2026-10-05(2) No space'])
+      expect(() => readVault(vault({ 'Projects/X.md': note(base, `${bad}\nText`) }))).toThrow(/Projects\/X\.md/)
+  })
+
+  it('fails on a link that is not a URL', () => {
+    const dir = vault({ 'Projects/X.md': note({ ...base, links: [{ label: 'x', href: 'javascript:alert(1)' }] }) })
+    expect(() => readVault(dir)).toThrow(/Projects\/X\.md[\s\S]*links/)
+  })
+
+  it('fails when two Published notes share a name, since wikilinks could not tell them apart', () => {
+    const dir = vault({
+      'Projects/Homeops.md': note(base),
+      'Projects/Old/Homeops.md': note({ ...base, slug: 'homeops-old' }),
+    })
+    expect(() => readVault(dir)).toThrow(/Homeops/)
+  })
+
   it('does not validate unpublished notes', () => {
     const dir = vault({ 'Projects/WIP.md': note({ publish: false }) })
     expect(readVault(dir).projects).toEqual([])

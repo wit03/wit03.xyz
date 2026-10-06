@@ -3,16 +3,17 @@ import path from 'node:path'
 import { readVault, type Vault } from './index'
 
 // Where the site's Projects come from, in order (docs/adr/0001):
-// 1. the Vault cloned by `scripts/fetch-vault.mjs` at build time,
-// 2. a local Vault folder named by VAULT_PATH (for writing with instant updates),
+// 1. a local Vault folder named by VAULT_PATH, when set explicitly (writing with instant updates;
+//    it wins so a leftover build clone never shadows the Vault you're editing),
+// 2. the Vault cloned into .vault/ by `scripts/fetch-vault.mjs` at build time (Vercel),
 // 3. the sample Vault in this repo, so builds without secrets still work.
 
-export const CLONED_VAULT = path.join(process.cwd(), '.vault')
+const CLONED_VAULT = path.join(process.cwd(), '.vault')
 const SAMPLE_VAULT = path.join(process.cwd(), 'content', 'sample-vault')
 
-export function vaultDir() {
-  if (fs.existsSync(CLONED_VAULT)) return CLONED_VAULT
+function vaultDir() {
   if (process.env.VAULT_PATH) return path.resolve(process.env.VAULT_PATH)
+  if (fs.existsSync(CLONED_VAULT)) return CLONED_VAULT
   return SAMPLE_VAULT
 }
 

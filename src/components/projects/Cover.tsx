@@ -1,3 +1,4 @@
+import { STATUS_COLOR } from '@/lib/palette'
 import { type Status, type VaultImage, defaultSrc, srcset } from '@/lib/vault'
 
 // A Project's Cover: its image when it has one, cropped to the card shape. Otherwise a pixel skyline
@@ -5,12 +6,6 @@ import { type Status, type VaultImage, defaultSrc, srcset } from '@/lib/vault'
 
 const W = 72
 const H = 34
-const LIT: Record<Status, string> = {
-  building: 'var(--accent)',
-  paused: 'var(--amber)',
-  shipped: 'var(--ok)',
-  archived: 'var(--muted)',
-}
 
 function seeded(text: string) {
   let s = [...text].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7)
@@ -82,11 +77,11 @@ export default function Cover({
         <g key={b.x}>
           <rect x={b.x} y={H - b.h} width={b.w} height={b.h} fill='#0a0f22' />
           {b.windows.map(([x, y]) => (
-            <rect key={`${x}-${y}`} x={x} y={y} width='1' height='1' fill={LIT[status]} />
+            <rect key={`${x}-${y}`} x={x} y={y} width='1' height='1' fill={STATUS_COLOR[status]} />
           ))}
         </g>
       ))}
-      <rect y={H - 2} width={W} height='2' fill={LIT[status]} opacity='0.9' />
+      <rect y={H - 2} width={W} height='2' fill={STATUS_COLOR[status]} opacity='0.9' />
     </svg>
   )
 }

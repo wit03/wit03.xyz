@@ -113,13 +113,13 @@ function What({ title, sub, children }: { title: string; sub: string; children?:
 }
 
 /**
- * `projects` are the carousel's Projects (non-archived, newest update first); `today` is the
+ * `projects` are the carousel's Projects (non-archived, newest update first); `buildDay` is the
  * build date as YYYY-MM-DD, which client components correct to the visitor's own today.
  */
 export function renderSection(
   section: Section,
   c: Content,
-  { builtAt, today, projects }: { builtAt: string; today: string; projects: Project[] },
+  { builtAt, buildDay, projects }: { builtAt: string; buildDay: string; projects: Project[] },
 ) {
   const bodies: Record<SectionId, () => ReactNode> = {
     now: () => (
@@ -153,7 +153,7 @@ export function renderSection(
                   <StatusPill status={p.status} />
                   {p.lastUpdate && (
                     <span className='font-mono text-[13px] text-muted'>
-                      <Ago date={p.lastUpdate} builtAt={today} />
+                      <Ago date={p.lastUpdate} builtAt={buildDay} />
                     </span>
                   )}
                 </span>

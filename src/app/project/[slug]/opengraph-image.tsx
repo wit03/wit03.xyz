@@ -1,10 +1,9 @@
 import { ImageResponse } from 'next/og'
 import sharp from 'sharp'
 import { getContent } from '@/lib/content'
-import { formatDay } from '@/lib/dates'
-import { PALETTE, OCEAN } from '@/lib/palette'
+import { formatDay, formatMonth } from '@/lib/dates'
+import { OCEAN, PALETTE, STATUS_COLOR } from '@/lib/palette'
 import { restingPixels } from '@/lib/sprite'
-import { type Status } from '@/lib/vault'
 import { getProject, getVault } from '@/lib/vault/source'
 
 // A Project's link preview: its Cover when it has one, otherwise a pixel-style card in the site's
@@ -21,7 +20,6 @@ export function generateStaticParams() {
 
 const C = PALETTE
 const P = 9 // screen pixels per sprite pixel
-const STATUS: Record<Status, string> = { building: C.accent, paused: '#e3a948', shipped: '#1fb36b', archived: C.muted }
 
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const project = getProject((await params).slug)
@@ -39,7 +37,14 @@ export default async function Image({ params }: { params: Promise<{ slug: string
 
   const { site } = getContent()
   const px = restingPixels().filter((p) => p.y <= 16)
-  const colour = STATUS[project.status]
+  const colour = STATUS_COLOR[project.status]
+  // The latest Journey entry's date; a Project with no entries yet shows when it started instead.
+  const latest = project.entries[0]?.date
+  const when = latest
+    ? `last update ${formatDay(latest)}`
+    : project.started
+      ? `started ${formatMonth(project.started)}`
+      : ''
   return new ImageResponse(
     <div
       style={{
@@ -84,7 +89,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           <div style={{ width: 14, height: 14, background: colour }} />
           {project.status}
         </div>
-        {project.lastUpdate && <div style={{ color: C.muted }}>{`last update ${formatDay(project.lastUpdate)}`}</div>}
+        {when && <div style={{ color: C.muted }}>{when}</div>}
         <div style={{ marginLeft: 'auto', color: C.accent }}>{`${new URL(site.url).host}/project/${project.slug}`}</div>
       </div>
     </div>,
