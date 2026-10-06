@@ -409,6 +409,47 @@ h4 {
     border: 0;
     border-top: 1px solid var(--line);
   }
+  .note-prose .callout {
+    display: grid;
+    gap: 6px;
+    border: 1px solid color-mix(in oklab, var(--accent), transparent 55%);
+    background: color-mix(in oklab, var(--accent), transparent 90%);
+    padding: 12px 14px;
+    color: var(--ink);
+    font-size: 15px;
+  }
+  .note-prose .callout > * {
+    margin: 0;
+  }
+  .note-prose .callout-title {
+    font-family: var(--font-pixel);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .note-prose .callout:is([data-callout='warning'], [data-callout='caution'], [data-callout='danger']) {
+    border-color: color-mix(in oklab, var(--amber), transparent 55%);
+    background: color-mix(in oklab, var(--amber), transparent 90%);
+  }
+  .note-prose .callout:is([data-callout='warning'], [data-callout='caution'], [data-callout='danger']) .callout-title {
+    color: var(--amber);
+  }
+  .note-prose .callout:is([data-callout='tip'], [data-callout='success']) {
+    border-color: color-mix(in oklab, var(--ok), transparent 55%);
+    background: color-mix(in oklab, var(--ok), transparent 90%);
+  }
+  .note-prose .callout:is([data-callout='tip'], [data-callout='success']) .callout-title {
+    color: var(--ok);
+  }
+  .tag-chip {
+    border: 1px solid var(--line);
+    padding: 0 5px;
+    font-family: var(--font-mono);
+    font-size: 0.8em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
   .journey-entry .note-prose {
     color: var(--muted);
   }

@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
 import { z } from 'zod'
-import { renderMarkdown } from './markdown'
+import { type RenderContext, renderMarkdown } from './markdown'
 
 // The Vault reader: a folder of Obsidian notes goes in, Projects come out. Only Published notes
 // (in Projects/ and flagged publish: true) are ever read; see docs/adr/0001. Anything wrong in a
@@ -133,6 +133,15 @@ export function readVault(root: string): Vault {
     seen.set(n.slug, n.rel)
   }
 
+  // Wikilinks resolve by note name, as in Obsidian, and only ever to Published notes.
+  const bySlug = new Map(published.map((n) => [n.noteName.toLowerCase(), n.slug]))
+  const ctx: RenderContext = {
+    linkFor: (name) => {
+      const slug = bySlug.get(name.toLowerCase())
+      return slug ? `/project/${slug}` : undefined
+    },
+  }
+
   const projects = published.map(({ rel, noteName, slug, fm, content }): Project => {
     const { intro, entries: raw } = splitJourney(content, rel)
     const ids = new Set<string>()
@@ -143,7 +152,13 @@ export function readVault(root: string): Vault {
           throw new Error(`${rel}: two Journey entries for ${key}; mark the later one "## ${e.date} (2) …"`)
         }
         ids.add(key)
-        return { id: `${slug}/${key}`, anchor: `e-${key}`, date: e.date, title: e.title, html: renderMarkdown(e.body) }
+        return {
+          id: `${slug}/${key}`,
+          anchor: `e-${key}`,
+          date: e.date,
+          title: e.title,
+          html: renderMarkdown(e.body, ctx),
+        }
       })
       .sort((a, b) => b.date.localeCompare(a.date) || b.anchor.localeCompare(a.anchor, 'en', { numeric: true }))
     return {
@@ -155,7 +170,7 @@ export function readVault(root: string): Vault {
       started: fm.started,
       links: fm.links,
       tags: fm.tags,
-      intro: renderMarkdown(intro),
+      intro: renderMarkdown(intro, ctx),
       entries,
       lastUpdate: entries[0]?.date ?? (fm.started ? `${fm.started}-01` : undefined),
     }

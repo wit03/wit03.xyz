@@ -203,3 +203,66 @@ describe('intro and Journey entries', () => {
     })
   })
 })
+
+describe('Obsidian syntax', () => {
+  const vaultWith = (body: string) =>
+    vault({
+      'Projects/Homeops.md': note(base, body),
+      'Projects/Pelter.md': note({ ...base, name: 'Pelter', slug: 'pelter-api' }),
+      'Projects/Draft.md': note({ ...base, name: 'Draft', publish: false }),
+      'Reading list.md': '# private',
+    })
+  const intro = (body: string) => readVault(vaultWith(body)).projects.find((p) => p.slug === 'homeops')!.intro
+
+  it('turns a wikilink to a published Project into a link to its page', () => {
+    expect(intro('Grew out of [[Pelter]].')).toContain('<a href="/project/pelter-api">Pelter</a>')
+  })
+
+  it('uses the alias and ignores headings in wikilinks', () => {
+    expect(intro('See [[Pelter#Setup|the API]].')).toContain('<a href="/project/pelter-api">the API</a>')
+  })
+
+  it('renders wikilinks to unpublished, private or missing notes as plain text', () => {
+    const html = intro('[[Draft]], [[Reading list|my reading list]] and [[Nowhere]].')
+    expect(html).not.toContain('<a')
+    expect(html).toContain('Draft, my reading list and Nowhere.')
+  })
+
+  it('renders callouts as styled boxes with their title', () => {
+    const html = intro('> [!warning] Mind the cables\n> They are everywhere.')
+    expect(html).toMatch(/<aside class="callout" data-callout="warning">/)
+    expect(html).toContain('<p class="callout-title">Mind the cables</p>')
+    expect(html).toContain('They are everywhere.')
+  })
+
+  it('titles a callout from its type when it has no title', () => {
+    expect(intro('> [!tip]\n> Back up first.')).toContain('<p class="callout-title">Tip</p>')
+  })
+
+  it('leaves ordinary blockquotes alone', () => {
+    expect(intro('> Just a quote.')).toContain('<blockquote>')
+  })
+
+  it('renders #tags as chips, but not headings, links or code', () => {
+    const html = intro('Built with #docker and #home/lab.\n\nSee [docs](https://x.dev/#install) and `#not-a-tag`.')
+    expect(html).toContain('<span class="tag-chip">#docker</span>')
+    expect(html).toContain('<span class="tag-chip">#home/lab</span>')
+    expect(html).toContain('href="https://x.dev/#install"')
+    expect(html).toContain('<code>#not-a-tag</code>')
+  })
+
+  it('strips block references', () => {
+    const html = intro('A line worth linking to ^abc123\n\nSee [[Pelter#^xyz]].')
+    expect(html).not.toContain('^abc123')
+    expect(html).toContain('A line worth linking to')
+    expect(html).toContain('<a href="/project/pelter-api">Pelter</a>')
+  })
+
+  it('applies the same rules inside Journey entries', () => {
+    const p = readVault(vaultWith('## 2026-10-01 Day\nUsing [[Pelter]] with #docker')).projects.find(
+      (x) => x.slug === 'homeops',
+    )!
+    expect(p.entries[0].html).toContain('<a href="/project/pelter-api">Pelter</a>')
+    expect(p.entries[0].html).toContain('class="tag-chip"')
+  })
+})

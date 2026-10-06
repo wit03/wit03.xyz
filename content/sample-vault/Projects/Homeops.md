@@ -13,6 +13,8 @@ links:
 Homeops started when my one-box home server outgrew the notes I kept about it. The goal is that I can
 wipe the machine and get everything back with one command: 35+ containers, monitoring, and 3-2-1 backups.
 
+It shares a box with [[MegaNuts]]'s build server, and borrows ideas from [[Side idea|a note I haven't published]].
+
 > [!note] Where it runs
 > Everything here runs on one mini PC under my desk. No cloud bills.
 
@@ -23,7 +25,7 @@ service green. The slowest part was re-pulling images.
 
 ## 2026-09-21 Grafana boards for everything
 
-Prometheus now scrapes every container. One board per service, one overview board for the whole box.
+Prometheus now scrapes every container. One board per service, one overview board for the whole box. #monitoring
 
 ## 2026-09-21 (2)
 
