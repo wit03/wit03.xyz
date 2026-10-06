@@ -2,7 +2,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
 import { z } from 'zod'
-import { type RenderContext, renderMarkdown } from './markdown'
+import { type VaultImage, imgTag, indexImages, isImagePath, loadImage } from './images'
+import { type ImageRef, type RenderContext, renderMarkdown } from './markdown'
 
 // The Vault reader: a folder of Obsidian notes goes in, Projects come out. Only Published notes
 // (in Projects/ and flagged publish: true) are ever read; see docs/adr/0001. Anything wrong in a
@@ -37,9 +38,17 @@ export type Project = {
   entries: JourneyEntry[]
   /** YYYY-MM-DD of the newest entry, else the first day of `started`. */
   lastUpdate?: string
+  /** Frontmatter `cover`, else the first image in the intro. */
+  cover?: VaultImage
 }
 
-export type Vault = { projects: Project[]; warnings: string[] }
+export type Vault = {
+  projects: Project[]
+  /** Every image a Published note references, and only those: the set the site may publish. */
+  images: VaultImage[]
+  /** Problems worth fixing that shouldn't fail the build (missing alt text, missing images). */
+  warnings: string[]
+}
 
 const PROJECTS_DIR = 'Projects'
 
@@ -135,15 +144,63 @@ export function readVault(root: string): Vault {
 
   // Wikilinks resolve by note name, as in Obsidian, and only ever to Published notes.
   const bySlug = new Map(published.map((n) => [n.noteName.toLowerCase(), n.slug]))
-  const ctx: RenderContext = {
-    linkFor: (name) => {
-      const slug = bySlug.get(name.toLowerCase())
-      return slug ? `/project/${slug}` : undefined
-    },
+  const linkFor = (name: string) => {
+    const slug = bySlug.get(name.toLowerCase())
+    return slug ? `/project/${slug}` : undefined
+  }
+
+  // Images: embeds resolve by filename anywhere in the Vault, Markdown paths relative to the note.
+  const imageIndex = indexImages(root)
+  const loaded = new Map<string, VaultImage>()
+  const used = new Map<string, VaultImage>()
+  const inVault = (p: string) => !path.relative(root, p).startsWith('..')
+  function resolveImage(ref: ImageRef, rel: string) {
+    let target = ref.target
+    try {
+      target = decodeURIComponent(target)
+    } catch {}
+    const candidates = ref.relative
+      ? [path.join(root, path.dirname(rel), target), path.join(root, target)]
+      : target.includes('/')
+        ? [path.join(root, target)]
+        : []
+    const found = candidates.find((c) => inVault(c) && isImagePath(c) && fs.existsSync(c))
+    const file = found ?? imageIndex.get(path.basename(target).toLowerCase())
+    if (!file) return undefined
+    if (!loaded.has(file)) loaded.set(file, loadImage(file))
+    return loaded.get(file)!
+  }
+  function contextFor(rel: string, onImage?: (img: VaultImage) => void): RenderContext {
+    return {
+      linkFor,
+      image(ref) {
+        const img = resolveImage(ref, rel)
+        if (!img) {
+          warnings.push(`${rel}: image "${ref.target}" not found in the Vault`)
+          return ''
+        }
+        if (!ref.alt) warnings.push(`${rel}: image "${ref.target}" has no alt text`)
+        used.set(img.key, img)
+        onImage?.(img)
+        return imgTag(img, ref.alt ?? '', ref.size)
+      },
+    }
   }
 
   const projects = published.map(({ rel, noteName, slug, fm, content }): Project => {
     const { intro, entries: raw } = splitJourney(content, rel)
+    const ctx = contextFor(rel)
+    let firstIntroImage: VaultImage | undefined
+    const introHtml = renderMarkdown(
+      intro,
+      contextFor(rel, (img) => (firstIntroImage ??= img)),
+    )
+    let cover: VaultImage | undefined
+    if (fm.cover) {
+      cover = resolveImage({ target: fm.cover.replace(/^!?\[\[|\]\]$/g, '').split('|')[0], relative: true }, rel)
+      if (cover) used.set(cover.key, cover)
+      else warnings.push(`${rel}: cover "${fm.cover}" not found in the Vault`)
+    }
     const ids = new Set<string>()
     const entries = raw
       .map((e): JourneyEntry => {
@@ -170,14 +227,16 @@ export function readVault(root: string): Vault {
       started: fm.started,
       links: fm.links,
       tags: fm.tags,
-      intro: renderMarkdown(intro, ctx),
+      intro: introHtml,
       entries,
       lastUpdate: entries[0]?.date ?? (fm.started ? `${fm.started}-01` : undefined),
+      cover: cover ?? firstIntroImage,
     }
   })
 
   projects.sort((a, b) => (b.lastUpdate ?? '').localeCompare(a.lastUpdate ?? '') || a.name.localeCompare(b.name))
-  return { projects, warnings }
+  return { projects, images: [...used.values()], warnings }
 }
 
 export { type FeedSite, projectFeed, projectsFeed } from './feed'
+export { type VaultImage, defaultSrc, mediaFile, optimiseImage, srcset } from './images'

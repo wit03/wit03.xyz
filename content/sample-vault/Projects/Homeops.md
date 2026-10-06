@@ -4,6 +4,7 @@ name: Homeops
 summary: My home lab rebuilt as code, with every container, backup and dashboard in one repo.
 status: building
 started: 2026-03
+cover: '[[homeops-rack.png]]'
 tags: [docker, tailscale, grafana, iac]
 links:
   - label: repo
@@ -22,6 +23,8 @@ It shares a box with [[MegaNuts]]'s build server, and borrows ideas from [[Side 
 
 Pulled the SSD on purpose and restored from the offsite copy. **41 minutes** from blank disk to every
 service green. The slowest part was re-pulling images.
+
+![[restore-times.png|Bar chart of restore time per service, slowest on the right]]
 
 ## 2026-09-21 Grafana boards for everything
 

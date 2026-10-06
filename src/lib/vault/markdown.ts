@@ -6,10 +6,22 @@ import { Marked, type TokenizerAndRendererExtension } from 'marked'
 // - > [!type] callouts become styled boxes.
 // - #tags become chips.
 // - ^block-references are stripped.
+// - ![[image]] embeds and relative ![alt](image) paths become Vault images (see images.ts).
+
+export type ImageRef = {
+  target: string
+  alt?: string
+  /** Obsidian's display width, from ![[img.png|300]]. */
+  size?: number
+  /** Markdown paths resolve relative to the note; embeds resolve by filename. */
+  relative: boolean
+}
 
 export type RenderContext = {
   /** The site path for a note name, if that note is published. */
   linkFor: (noteName: string) => string | undefined
+  /** HTML for an image in the Vault, or '' when it can't be found. */
+  image: (ref: ImageRef) => string
 }
 
 const FENCE = /^\s*(```|~~~)/
@@ -54,6 +66,20 @@ function preprocess(source: string): string {
   return out.join('\n')
 }
 
+const isRemote = (href: string) => /^(https?:|data:|\/\/)/i.test(href)
+
+/** ![[img.png|alt]], ![[img.png|300]] or ![[img.png|alt|300]]: a number is a size, anything else alt text. */
+function parseEmbed(inner: string): ImageRef {
+  const [target, ...rest] = inner.split('|').map((p) => p.trim())
+  const ref: ImageRef = { target, relative: false }
+  for (const part of rest) {
+    const size = part.match(/^(\d+)(?:x\d+)?$/)
+    if (size) ref.size = Number(size[1])
+    else if (part) ref.alt = part
+  }
+  return ref
+}
+
 function parseWikilink(inner: string) {
   const [target, alias] = inner.split('|')
   const noteName = target.split('#')[0].trim()
@@ -69,10 +95,14 @@ function extensions(ctx: RenderContext): TokenizerAndRendererExtension[] {
       tokenizer(src) {
         const m = src.match(/^(!?)\[\[([^\]\n]+?)\]\]/)
         if (!m) return undefined
-        return { type: 'wikilink', raw: m[0], embed: m[1] === '!', ...parseWikilink(m[2]) }
+        return { type: 'wikilink', raw: m[0], embed: m[1] === '!', inner: m[2], ...parseWikilink(m[2]) }
       },
       renderer(token) {
-        if (token.embed) return ''
+        if (token.embed) {
+          const ref = parseEmbed(token.inner)
+          // Embedded notes (transclusions) aren't published; only images are.
+          return /\.(png|jpe?g|webp|gif|avif)$/i.test(ref.target) ? ctx.image(ref) : ''
+        }
         const href = ctx.linkFor(token.noteName)
         const text = escapeHtml(token.text)
         return href ? `<a href="${escapeHtml(href)}">${text}</a>` : text
@@ -101,6 +131,15 @@ function extensions(ctx: RenderContext): TokenizerAndRendererExtension[] {
 export function renderMarkdown(source: string, ctx: RenderContext) {
   const trimmed = source.trim()
   if (!trimmed) return ''
-  const md = new Marked({ gfm: true, extensions: extensions(ctx) })
+  const md = new Marked({
+    gfm: true,
+    extensions: extensions(ctx),
+    renderer: {
+      image({ href, text }) {
+        if (isRemote(href)) return false
+        return ctx.image({ target: href, alt: text || undefined, relative: true })
+      },
+    },
+  })
   return md.parse(preprocess(trimmed), { async: false }) as string
 }

@@ -44,7 +44,14 @@ export default function ProjectsPage() {
                 href={`/project/${p.slug}`}
                 className='project-row grid grid-cols-[150px_1fr_auto] items-center gap-5 border-t border-line px-2 py-4 max-sm:grid-cols-[96px_1fr] max-sm:gap-4'
               >
-                <Cover slug={p.slug} status={p.status} name={p.name} className='border border-line' />
+                <Cover
+                  slug={p.slug}
+                  status={p.status}
+                  name={p.name}
+                  image={p.cover}
+                  sizes='150px'
+                  className='border border-line'
+                />
                 <span className='grid min-w-0 gap-1'>
                   <span className='flex flex-wrap items-center gap-x-3 gap-y-1'>
                     <b className='text-[19px] font-semibold tracking-[-0.01em]'>{p.name}</b>

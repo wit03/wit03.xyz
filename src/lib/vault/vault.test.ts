@@ -1,8 +1,9 @@
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
-import { afterEach, describe, expect, it } from 'vitest'
-import { projectFeed, projectsFeed, readVault } from '@/lib/vault'
+import sharp from 'sharp'
+import { afterEach, beforeAll, describe, expect, it } from 'vitest'
+import { optimiseImage, projectFeed, projectsFeed, readVault } from '@/lib/vault'
 
 // Every test builds a small Vault on disk and reads it through the public interface only.
 
@@ -330,5 +331,125 @@ describe('feeds', () => {
     const v = readVault(vault({ 'Projects/A.md': note({ ...base, name: 'A & B' }, '## 2026-01-01 <Tags> & stuff\nx') }))
     const xml = projectsFeed(v, site)
     expect(xml).toContain('<title>A &amp; B: &lt;Tags&gt; &amp; stuff</title>')
+  })
+})
+
+describe('images and Covers', () => {
+  let png: Buffer
+  let wide: Buffer
+  beforeAll(async () => {
+    png = await sharp({ create: { width: 400, height: 200, channels: 3, background: '#8196ff' } })
+      .png()
+      .toBuffer()
+    wide = await sharp({ create: { width: 2400, height: 1200, channels: 3, background: '#e3a948' } })
+      .png()
+      .toBuffer()
+  })
+  const site = { url: 'https://wit03.xyz', handle: 'wit03' }
+
+  it('renders Obsidian embeds as responsive images with alt text', () => {
+    const v = readVault(
+      vault({
+        'Projects/H.md': note(base, '![[rack.png|The rack under my desk]]'),
+        'attachments/rack.png': png,
+      }),
+    )
+    const html = v.projects[0].intro
+    expect(html).toMatch(/<img [^>]*alt="The rack under my desk"/)
+    expect(html).toMatch(/src="\/media\/[0-9a-f]{12}-400\.webp"/)
+    expect(html).toContain('width="400" height="200"')
+  })
+
+  it('offers several widths, never wider than the original', () => {
+    const v = readVault(vault({ 'Projects/H.md': note(base, '![[big.png|Big]]'), 'big.png': wide }))
+    const srcset = v.projects[0].intro.match(/srcset="([^"]*)"/)![1]
+    expect(srcset.split(', ').map((s) => s.split(' ')[1])).toEqual(['480w', '960w', '1600w'])
+    const small = readVault(vault({ 'Projects/H.md': note(base, '![[s.png|Small]]'), 's.png': png }))
+    expect(small.projects[0].intro.match(/srcset="([^"]*)"/)![1]).toMatch(/^\/media\/[0-9a-f]{12}-400\.webp 400w$/)
+  })
+
+  it('treats a number after | as Obsidian size, not alt text, and warns about the missing alt', () => {
+    const v = readVault(vault({ 'Projects/H.md': note(base, '![[rack.png|300]]'), 'rack.png': png }))
+    expect(v.projects[0].intro).toContain('alt=""')
+    expect(v.projects[0].intro).toContain('width="300" height="150"')
+    expect(v.warnings.join('\n')).toMatch(/Projects\/H\.md.*rack\.png.*alt text/)
+  })
+
+  it('renders Markdown images relative to the note', () => {
+    const v = readVault(
+      vault({ 'Projects/H.md': note(base, '![A diagram](img/my%20diagram.png)'), 'Projects/img/my diagram.png': png }),
+    )
+    expect(v.projects[0].intro).toMatch(/<img [^>]*alt="A diagram"/)
+    expect(v.warnings).toEqual([])
+  })
+
+  it('leaves remote images alone', () => {
+    const v = readVault(vault({ 'Projects/H.md': note(base, '![Badge](https://img.shields.io/x.svg)') }))
+    expect(v.projects[0].intro).toContain('src="https://img.shields.io/x.svg"')
+  })
+
+  it('warns and drops an image that is not in the Vault', () => {
+    const v = readVault(vault({ 'Projects/H.md': note(base, 'Before ![[missing.png|Gone]] after') }))
+    expect(v.projects[0].intro).not.toContain('<img')
+    expect(v.warnings.join('\n')).toMatch(/missing\.png.*not found/)
+  })
+
+  it('collects only images referenced by Published notes', () => {
+    const v = readVault(
+      vault({
+        'Projects/H.md': note(base, '![[used.png|Used]]'),
+        'Projects/Draft.md': note({ ...base, name: 'Draft', publish: false }, '![[draft.png|Draft]]'),
+        'Journal/Day.md': '![[private.png]]',
+        'used.png': png,
+        'draft.png': wide,
+        'private.png': png,
+      }),
+    )
+    expect(v.images.map((i) => path.basename(i.source))).toEqual(['used.png'])
+  })
+
+  it('picks the Cover from frontmatter, then the first intro image, then none', () => {
+    const v = readVault(
+      vault({
+        'Projects/A.md': note({ ...base, name: 'A', cover: '[[cover.png]]' }, '![[first.png|First]]'),
+        'Projects/B.md': note(
+          { ...base, name: 'B' },
+          'Intro ![[first.png|First]]\n\n## 2026-01-01 x\n![[later.png|Later]]',
+        ),
+        'Projects/C.md': note({ ...base, name: 'C' }, '## 2026-01-01 x\n![[later.png|Later]]'),
+        'cover.png': wide,
+        'first.png': png,
+        'later.png': png,
+      }),
+    )
+    const cover = (n: string) => v.projects.find((p) => p.name === n)!.cover
+    expect(path.basename(cover('A')!.source)).toBe('cover.png')
+    expect(path.basename(cover('B')!.source)).toBe('first.png')
+    expect(cover('C')).toBeUndefined()
+  })
+
+  it('uses absolute image URLs in feeds', () => {
+    const v = readVault(
+      vault({ 'Projects/H.md': note(base, '## 2026-01-01 Pic\n![[rack.png|Rack]]'), 'rack.png': png }),
+    )
+    const xml = projectsFeed(v, site)
+    expect(xml).toMatch(/src="https:\/\/wit03\.xyz\/media\/[0-9a-f]{12}-400\.webp"/)
+    expect(xml).toMatch(/srcset="https:\/\/wit03\.xyz\/media\//)
+  })
+
+  it('strips all metadata, GPS included, when optimising', async () => {
+    const dir = vault({})
+    const photo = path.join(dir, 'photo.jpg')
+    await sharp({ create: { width: 64, height: 48, channels: 3, background: '#123456' } })
+      .jpeg()
+      .withExif({ IFD0: { Copyright: 'wit03' }, IFD3: { GPSLatitudeRef: 'N', GPSLatitude: '13/1 45/1 0/1' } })
+      .toFile(photo)
+    expect((await sharp(photo).metadata()).exif).toBeDefined()
+    const out = await optimiseImage(photo, 480)
+    const meta = await sharp(out).metadata()
+    expect(meta.format).toBe('webp')
+    expect(meta.exif).toBeUndefined()
+    expect(meta.xmp).toBeUndefined()
+    expect(meta.icc).toBeUndefined()
   })
 })

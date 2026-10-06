@@ -147,7 +147,7 @@ export function renderSection(
         {projects.map((p) => (
           <li key={p.slug}>
             <Link href={`/project/${p.slug}`} className='project-card'>
-              <Cover slug={p.slug} status={p.status} name={p.name} />
+              <Cover slug={p.slug} status={p.status} name={p.name} image={p.cover} />
               <span className='grid content-start gap-2 px-4 pt-3.5 pb-4'>
                 <span className='flex items-center justify-between gap-3'>
                   <StatusPill status={p.status} />

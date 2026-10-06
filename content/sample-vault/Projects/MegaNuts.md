@@ -9,6 +9,8 @@ tags: [game, canvas, typescript]
 
 A weekend game that keeps growing. Squirrels, nuts, and a physics engine I'm writing myself.
 
+![[meganuts-squirrel.png|A pixel squirrel beside a pile of nuts]]
+
 ## 2026-09-30 Nuts now bounce
 
 Wrote a fixed-timestep loop so the physics behaves the same at 60 Hz and 144 Hz.

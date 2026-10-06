@@ -1,7 +1,7 @@
-import type { Status } from '@/lib/vault'
+import { type Status, type VaultImage, defaultSrc, srcset } from '@/lib/vault'
 
-// A Project's Cover. Until a Project has an image, a pixel skyline stands in: drawn from the slug so
-// each Project keeps the same one, lit in its Status colour. Rendered as SVG on the server.
+// A Project's Cover: its image when it has one, cropped to the card shape. Otherwise a pixel skyline
+// stands in, drawn from the slug so each Project keeps the same one, lit in its Status colour.
 
 const W = 72
 const H = 34
@@ -21,13 +21,33 @@ export default function Cover({
   slug,
   status,
   name,
+  image,
+  sizes = '300px',
   className = '',
 }: {
   slug: string
   status: Status
   name: string
+  image?: VaultImage
+  /** The rendered width, for picking the right srcset entry. */
+  sizes?: string
   className?: string
 }) {
+  if (image)
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- Vault images are pre-sized WebP from /media
+      <img
+        src={defaultSrc(image)}
+        srcSet={srcset(image)}
+        sizes={sizes}
+        width={image.width}
+        height={image.height}
+        alt={`${name}: cover`}
+        loading='lazy'
+        decoding='async'
+        className={`block aspect-[72/34] w-full object-cover ${className}`}
+      />
+    )
   const r = seeded(slug)
   const stars = Array.from({ length: 16 }, () => [Math.floor(r() * W), Math.floor(r() * H * 0.5)])
   const blocks: { x: number; w: number; h: number; windows: [number, number][] }[] = []

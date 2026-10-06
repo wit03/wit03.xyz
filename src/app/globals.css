@@ -405,6 +405,12 @@ h4 {
     padding-left: 14px;
     color: var(--muted);
   }
+  .note-prose img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+  }
   .note-prose hr {
     border: 0;
     border-top: 1px solid var(--line);

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Ago from '@/components/projects/Ago'
 import ArticleShell from '@/components/projects/ArticleShell'
+import Cover from '@/components/projects/Cover'
 import StatusPill from '@/components/projects/StatusPill'
 import Subscribe from '@/components/projects/Subscribe'
 import { formatDay, formatMonth, today } from '@/lib/dates'
@@ -44,6 +45,14 @@ export default async function ProjectPage({ params }: Props) {
   return (
     <ArticleShell>
       <article className='grid gap-10'>
+        <Cover
+          slug={project.slug}
+          status={project.status}
+          name={project.name}
+          image={project.cover}
+          sizes='(max-width: 800px) 100vw, 760px'
+          className='border border-line'
+        />
         <header className='grid gap-4'>
           <h1 className='text-[clamp(36px,6vw,56px)] leading-[1.05] font-semibold tracking-[-0.03em]'>
             {project.name}

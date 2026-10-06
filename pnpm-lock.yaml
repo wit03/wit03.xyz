@@ -11,6 +11,9 @@ importers:
       gray-matter:
         specifier: ^4.0.3
         version: 4.0.3
+      image-size:
+        specifier: ^2.0.4
+        version: 2.0.4
       marked:
         specifier: ^18.0.14
         version: 18.0.14
@@ -23,6 +26,9 @@ importers:
       react-dom:
         specifier: 19.2.8
         version: 19.2.8(react@19.2.8)
+      sharp:
+        specifier: 0.35.4
+        version: 0.35.4(@types/node@20.19.43)
       suncalc:
         specifier: ^2.0.2
         version: 2.0.2
@@ -1458,6 +1464,11 @@ packages:
     resolution: {integrity: sha512-HpbUakT7xp5miBUywCHf36ZEuAJNklBJDDsGpUIjMzOSmM8ELSfA9Sa/QDPeNeqeoN31u+UTCkL4klCOVvRm4Q==}
     engines: {node: '>= 4'}
 
+  image-size@2.0.4:
+    resolution: {integrity: sha512-QRUkFFsRV/6fuESxb9Vkq+a0LkSrgKXuc2NEqfikiXxxN/G3tjWt5EVUlMaImRBZRZK/jRBEbYvpPYZL8t08Zw==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
     engines: {node: '>=6'}
@@ -2601,8 +2612,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@img/colour@1.1.0':
-    optional: true
+  '@img/colour@1.1.0': {}
 
   '@img/sharp-darwin-arm64@0.35.4':
     optionalDependencies:
@@ -3842,6 +3852,8 @@ snapshots:
 
   ignore@7.0.10: {}
 
+  image-size@2.0.4: {}
+
   import-fresh@3.3.1:
     dependencies:
       parent-module: 1.0.1
@@ -4485,7 +4497,6 @@ snapshots:
       '@img/sharp-win32-ia32': 0.35.4
       '@img/sharp-win32-x64': 0.35.4
       '@types/node': 20.19.43
-    optional: true
 
   shebang-command@2.0.0:
     dependencies:
