@@ -270,6 +270,20 @@ h4 {
     color: var(--ok);
   }
 
+  .project-row {
+    transition: background-color 0.18s steps(3);
+  }
+  .project-row:hover {
+    background: color-mix(in oklab, var(--bg), var(--ink) 5%);
+  }
+  .project-row:hover .row-arrow {
+    transform: translateX(2px);
+    color: var(--accent);
+  }
+  li:last-child > .project-row {
+    border-bottom: 1px solid var(--line);
+  }
+
   /* Rendered note Markdown */
   .note-prose {
     display: grid;

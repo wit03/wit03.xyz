@@ -34,7 +34,7 @@ export default function Home() {
             <ul className='ml-auto flex flex-wrap gap-6 font-mono text-[15px] max-sm:order-3 max-sm:text-sm max-sm:ml-0 max-sm:w-full max-sm:justify-between max-sm:gap-2'>
               {nav.map((s) => (
                 <li key={s.id}>
-                  <a href={`#${s.id}`} className='text-muted hover:text-ink'>
+                  <a href={s.id === 'projects' ? '/projects' : `#${s.id}`} className='text-muted hover:text-ink'>
                     {s.id}
                   </a>
                 </li>
