@@ -4,12 +4,16 @@ import Hero from '@/components/Hero'
 import Reveal from '@/components/Reveal'
 import { renderSection } from '@/components/Sections'
 import { getContent } from '@/lib/content'
-import { currentYearMonth } from '@/lib/dates'
+import { currentYearMonth, today } from '@/lib/dates'
+import { getVault } from '@/lib/vault/source'
 
 export default function Home() {
   const content = getContent()
-  const { site, sections } = content
+  const { site } = content
   const builtAt = currentYearMonth()
+  // The carousel previews live work; archived Projects stay on /projects. No Projects, no stop.
+  const projects = getVault().projects.filter((p) => p.status !== 'archived')
+  const sections = content.sections.filter((s) => s.id !== 'projects' || projects.length > 0)
   const links = [
     ...site.links,
     ...(site.email ? [{ label: 'Email', href: `mailto:${site.email}` }] : []),
@@ -62,7 +66,7 @@ export default function Home() {
           )}
         </div>
 
-        <main>{sections.map((s) => renderSection(s, content, builtAt))}</main>
+        <main>{sections.map((s) => renderSection(s, content, { builtAt, today: today(), projects }))}</main>
 
         <Footer site={site} />
       </div>

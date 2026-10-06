@@ -63,15 +63,6 @@ const educationSchema = z.object({
   meta: z.string().optional(),
 })
 
-const projectSchema = z.object({
-  name: z.string(),
-  title: z.string(),
-  summary: z.string(),
-  tags: z.array(z.string()).default([]),
-  url: z.url().optional(),
-  order: z.number().default(99),
-})
-
 const listOf = <T extends z.ZodType>(item: T) => z.object({ items: z.array(item).default([]) })
 
 const nowSchema = listOf(z.string())
@@ -151,10 +142,6 @@ export function getContent() {
     }))
     .sort(byRecency)
 
-  const projects = readDir('projects', projectSchema)
-    .map(({ slug, data }) => ({ slug, ...data }))
-    .sort((a, b) => a.order - b.order)
-
   const talks = [
     ...readFile('talks.md', talksSchema).data.items.map((t) => ({ ...t, kind: 'Talk' as const, where: t.event })),
     ...readFile('writing.md', writingSchema).data.items.map((w) => ({
@@ -170,7 +157,6 @@ export function getContent() {
     now: readFile('now.md', nowSchema).data.items,
     work,
     education,
-    projects,
     talks,
     awards: readFile('awards.md', awardsSchema).data.items,
     offscreen: readFile('offscreen.md', offscreenSchema).data.items,

@@ -3,6 +3,12 @@ import Duration from '@/components/Duration'
 import type { Content, Section, SectionId, TimelineEntry } from '@/lib/content'
 import { formatMonth, formatRange, formatYears } from '@/lib/dates'
 import { external } from '@/lib/links'
+import Link from 'next/link'
+import Ago from '@/components/projects/Ago'
+import Cover from '@/components/projects/Cover'
+import ProjectCarousel from '@/components/projects/ProjectCarousel'
+import StatusPill from '@/components/projects/StatusPill'
+import type { Project } from '@/lib/vault'
 
 function Shell({ section, children }: { section: Section; children: ReactNode }) {
   // The surface above is 82svh, so the first section clears the rest of the first screen
@@ -106,7 +112,15 @@ function What({ title, sub, children }: { title: string; sub: string; children?:
   )
 }
 
-export function renderSection(section: Section, c: Content, builtAt: string) {
+/**
+ * `projects` are the carousel's Projects (non-archived, newest update first); `today` is the
+ * build date as YYYY-MM-DD, which client components correct to the visitor's own today.
+ */
+export function renderSection(
+  section: Section,
+  c: Content,
+  { builtAt, today, projects }: { builtAt: string; today: string; projects: Project[] },
+) {
   const bodies: Record<SectionId, () => ReactNode> = {
     now: () => (
       <ul className='grid gap-1.5'>
@@ -123,24 +137,33 @@ export function renderSection(section: Section, c: Content, builtAt: string) {
     work: () => <Timeline entries={c.work} builtAt={builtAt} />,
     education: () => <Timeline entries={c.education} builtAt={builtAt} years />,
     projects: () => (
-      <div className='grid'>
-        {c.projects.map((p) => (
-          <Row key={p.slug} href={p.url}>
-            <When>{p.name}</When>
-            <What title={p.title} sub={p.summary}>
-              {p.tags.length > 0 && (
-                <span className='mt-1 flex flex-wrap gap-1.5'>
-                  {p.tags.map((t) => (
-                    <em key={t} className='border border-line px-1.5 font-mono text-[12px] text-muted not-italic'>
-                      {t}
-                    </em>
-                  ))}
+      <ProjectCarousel
+        footer={
+          <Link href='/projects' className='font-mono text-[15px] hover:text-accent'>
+            See all projects →
+          </Link>
+        }
+      >
+        {projects.map((p) => (
+          <li key={p.slug}>
+            <Link href={`/project/${p.slug}`} className='project-card'>
+              <Cover slug={p.slug} status={p.status} name={p.name} />
+              <span className='grid content-start gap-2 px-4 pt-3.5 pb-4'>
+                <span className='flex items-center justify-between gap-3'>
+                  <StatusPill status={p.status} />
+                  {p.lastUpdate && (
+                    <span className='font-mono text-[13px] text-muted'>
+                      <Ago date={p.lastUpdate} builtAt={today} />
+                    </span>
+                  )}
                 </span>
-              )}
-            </What>
-          </Row>
+                <b className='text-[19px] font-semibold tracking-[-0.01em]'>{p.name}</b>
+                <span className='text-[15px] leading-normal text-muted'>{p.summary}</span>
+              </span>
+            </Link>
+          </li>
         ))}
-      </div>
+      </ProjectCarousel>
     ),
     talks: () => (
       <div className='grid'>
