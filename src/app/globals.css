@@ -12,6 +12,9 @@
   --accent: #8196ff;
   --deep: #0b2f7a;
   --ok: #1fb36b;
+  --amber: #e3a948;
+  /* sunlit water under the waterline; Project pages start from it */
+  --sea: #12204a;
   /* --d (0–1) is the scroll depth, set by the dive gauge. The page gets bluer as it grows. */
   --d: 0;
   --water: color-mix(in oklab, var(--bg), var(--deep) calc(var(--d) * 16%));
@@ -25,6 +28,7 @@
   --color-line: var(--line);
   --color-accent: var(--accent);
   --color-ok: var(--ok);
+  --color-amber: var(--amber);
   --color-water: var(--water);
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -224,5 +228,165 @@ h4 {
   }
   .rv {
     transform: none;
+  }
+}
+
+/* ---------- Projects: overview, Project pages, carousel ---------- */
+@layer components {
+  /* Project pages keep the dark water, starting from the sunlit shallows. */
+  .article-water {
+    background: linear-gradient(var(--sea), var(--bg) 640px);
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid currentColor;
+    padding-inline: 7px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--muted);
+  }
+  .status-pill i {
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+  }
+  .status-pill[data-status='building'] {
+    color: var(--accent);
+  }
+  .status-pill[data-status='building'] i {
+    animation: pulse 1.6s steps(2) infinite;
+  }
+  .status-pill[data-status='paused'] {
+    color: var(--amber);
+  }
+  .status-pill[data-status='shipped'] {
+    color: var(--ok);
+  }
+
+  /* Rendered note Markdown */
+  .note-prose {
+    display: grid;
+    gap: 14px;
+    font-size: 17px;
+    max-width: 66ch;
+  }
+  .note-prose > * {
+    margin: 0;
+  }
+  .note-prose h2,
+  .note-prose h3,
+  .note-prose h4 {
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-top: 8px;
+  }
+  .note-prose h2 {
+    font-size: 22px;
+  }
+  .note-prose h3 {
+    font-size: 19px;
+  }
+  .note-prose a {
+    color: var(--accent);
+    text-underline-offset: 3px;
+  }
+  .note-prose strong {
+    font-weight: 600;
+  }
+  .note-prose ul,
+  .note-prose ol {
+    display: grid;
+    gap: 4px;
+    padding-left: 22px;
+  }
+  .note-prose ul {
+    list-style: '–  ';
+  }
+  .note-prose code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 0 4px;
+  }
+  .note-prose pre {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 12px 14px;
+    overflow-x: auto;
+  }
+  .note-prose pre code {
+    border: 0;
+    padding: 0;
+    background: none;
+  }
+  .note-prose blockquote {
+    border-left: 2px solid var(--line);
+    padding-left: 14px;
+    color: var(--muted);
+  }
+  .note-prose hr {
+    border: 0;
+    border-top: 1px solid var(--line);
+  }
+  .journey-entry .note-prose {
+    color: var(--muted);
+  }
+  .journey-entry .note-prose strong {
+    color: var(--ink);
+  }
+
+  /* Journey: a timeline like the work section, the newest entry lit */
+  .journey {
+    position: relative;
+    display: grid;
+    gap: 36px;
+    padding-left: 26px;
+    list-style: none;
+    margin: 0;
+  }
+  .journey::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--line);
+  }
+  .journey-entry {
+    position: relative;
+    display: grid;
+    gap: 10px;
+  }
+  .journey-entry::before {
+    content: '';
+    position: absolute;
+    left: -26px;
+    top: 9px;
+    width: 9px;
+    height: 9px;
+    border: 1px solid var(--muted);
+    background: var(--bg);
+  }
+  .journey-entry:first-child::before {
+    background: var(--accent);
+    border-color: var(--accent);
+    animation: pulse 1.6s steps(2) infinite;
+  }
+  .entry-anchor {
+    color: var(--line);
+    text-decoration: none;
+  }
+  .journey-entry:hover .entry-anchor,
+  .entry-anchor:focus-visible {
+    color: var(--muted);
   }
 }

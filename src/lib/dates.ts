@@ -44,3 +44,27 @@ export function formatDuration(start: YearMonth, end: YearMonth) {
   if (months) parts.push(`${months} ${months === 1 ? 'mo' : 'mos'}`)
   return parts.join(' ')
 }
+
+// Journey entries carry full dates, "YYYY-MM-DD".
+
+export function today(date = new Date()) {
+  return `${currentYearMonth(date)}-${String(date.getDate()).padStart(2, '0')}`
+}
+
+/** "3 Oct 2026" */
+export function formatDay(ymd: string) {
+  const [y, m, d] = ymd.split('-').map(Number)
+  return `${d} ${MONTHS[m - 1]} ${y}`
+}
+
+/** "today", "yesterday", "5 days ago", "3 weeks ago", "2 months ago", "1 year ago" */
+export function relativeDay(ymd: string, now: string) {
+  const days = Math.round((Date.parse(`${now}T00:00:00Z`) - Date.parse(`${ymd}T00:00:00Z`)) / 86_400_000)
+  if (days <= 0) return 'today'
+  if (days === 1) return 'yesterday'
+  const unit = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'} ago`
+  if (days < 14) return unit(days, 'day')
+  if (days < 60) return unit(Math.round(days / 7), 'week')
+  if (days < 365) return unit(Math.round(days / 30), 'month')
+  return unit(Math.round(days / 365), 'year')
+}
